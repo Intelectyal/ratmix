@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1cqdgafqudth"]
+
+[ext_resource type="Script" path="res://scripts/rat_scene.gd" id="1_bnijq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ap7yf"]
+size = Vector2(176, 176)
+
+[sub_resource type="Animation" id="Animation_a5crr"]
+resource_name = "breath"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.52, 0.48), Vector2(0.5, 0.5), Vector2(0.48, 0.52), Vector2(0.5, 0.5), Vector2(0.52, 0.48)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_81vt2"]
+_data = {
+"breath": SubResource("Animation_a5crr")
+}
+
+[node name="Rat_body" type="CharacterBody2D"]
+scale = Vector2(0.497476, 0.502524)
+collision_layer = 2
+input_pickable = true
+script = ExtResource("1_bnijq")
+
+[node name="Goto" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+top_level = true
+light_mask = 256
+visibility_layer = 256
+shape = SubResource("RectangleShape2D_ap7yf")
+debug_color = Color(0.819608, 0.360784, 0.478431, 0.419608)
+
+[node name="body" type="Sprite2D" parent="."]
+
+[node name="ears_f" type="Sprite2D" parent="."]
+position = Vector2(1, 1)
+
+[node name="ears_s" type="Sprite2D" parent="."]
+position = Vector2(1, 1)
+
+[node name="eyes" type="Sprite2D" parent="."]
+
+[node name="legs_f" type="Sprite2D" parent="."]
+
+[node name="legs_s" type="Sprite2D" parent="."]
+
+[node name="nose_f" type="Sprite2D" parent="."]
+
+[node name="nose_s" type="Sprite2D" parent="."]
+
+[node name="tail_s" type="Sprite2D" parent="."]
+
+[node name="tail_f" type="Sprite2D" parent="."]
+
+[node name="spots" type="Sprite2D" parent="."]
+
+[node name="Rat_anime" type="AnimationPlayer" parent="."]
+autoplay = "breath"
+libraries = {
+"": SubResource("AnimationLibrary_81vt2")
+}
+
+[connection signal="input_event" from="." to="." method="_on_character_body_2d_input_event"]
+[connection signal="timeout" from="Goto" to="." method="_on_timer_timeout"]

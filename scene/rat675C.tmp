@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://b1cqdgafqudth"]
+
+[ext_resource type="Script" path="res://scene/rat_scene_name.gd" id="1_a7goe"]
+[ext_resource type="Texture2D" uid="uid://dlcv4af1ap7hp" path="res://art/rat/bodys/1.png" id="2_0lp7a"]
+[ext_resource type="Texture2D" uid="uid://doxaskc6cf5iy" path="res://art/rat/tails/1.png" id="3_8w46f"]
+[ext_resource type="Texture2D" uid="uid://bjj0um4lnjn5t" path="res://art/rat/eyes/1.png" id="4_58cyg"]
+[ext_resource type="Texture2D" uid="uid://dfqnu0vqile0" path="res://art/rat/ears/1.png" id="5_of6jq"]
+[ext_resource type="Texture2D" uid="uid://d0tamlsuohwlx" path="res://art/rat/legs/1.png" id="6_fec2j"]
+
+[node name="rat_scene" type="Node2D"]
+script = ExtResource("1_a7goe")
+
+[node name="rat_marker" type="Marker2D" parent="."]
+position = Vector2(0, 16)
+scale = Vector2(0.5, 0.5)
+metadata/_edit_group_ = true
+
+[node name="body" type="Sprite2D" parent="rat_marker"]
+texture = ExtResource("2_0lp7a")
+
+[node name="tail" type="Sprite2D" parent="rat_marker"]
+texture = ExtResource("3_8w46f")
+
+[node name="eyes" type="Sprite2D" parent="rat_marker"]
+texture = ExtResource("4_58cyg")
+
+[node name="ears" type="Sprite2D" parent="rat_marker"]
+texture = ExtResource("5_of6jq")
+
+[node name="legs" type="Sprite2D" parent="rat_marker"]
+texture = ExtResource("6_fec2j")
+
+[node name="nose" type="Sprite2D" parent="rat_marker"]

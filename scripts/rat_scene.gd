@@ -15,6 +15,7 @@ var counter_pos : Vector2
 var number_of_pos : int = -1
 var rat_on_obj
 var obj_anim_flag : bool = false
+var breedable : bool = true
 
 func _ready():
 	name_generator()
@@ -23,11 +24,16 @@ func _ready():
 
 func anim_flag_change():
 	obj_anim_flag = !obj_anim_flag
-
+func _on_breedable_timeout():
+	breedable = true
+func breeded():
+	breedable = false
+	%Breedable.start()
 func _on_timer_timeout():
 	if true:
 		#var i = GlobalFuncNVar.roulette(10)
 		var i = randi_range(0,2)
+		#var i = 3
 		match (i):
 			0:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
@@ -51,6 +57,7 @@ func _on_timer_timeout():
 							run_state = 2
 							target = GlobalFuncNVar.objs_coord[j]
 							return
+			
 	pass
 
 func _input(event):

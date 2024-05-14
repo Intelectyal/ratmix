@@ -22,10 +22,9 @@ func brush_cursor(vis):
 func shelftile():
 	%TileMap.set_layer_enabled(1,true)
 func rat_construct(): #Создает сцену с крысой и знаносит крысу в массив rats
-	if !GlobalFuncNVar.rats_arr.size() < GlobalFuncNVar.max_rats:
-		GlobalFuncNVar.can_buy_rat = false
-		return null
-	print(GlobalFuncNVar.rats_arr.size())	
+	GlobalFuncNVar.FoodTime -= 7.0
+	$HUD/FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
+	#print(GlobalFuncNVar.rats_arr.size())	
 	GlobalFuncNVar.rats_arr.append(rat_scene.instantiate())
 	$HUD.rat_bar_update()
 	var rat = GlobalFuncNVar.rats_arr[GlobalFuncNVar.rats_arr.size()-1]
@@ -37,9 +36,15 @@ func rat_construct(): #Создает сцену с крысой и знанос
 	
 
 func _on_hud_make_child(parent0 : Object,parent1 : Object): #тестовая кнопка, создающая потомка крысы 1 и 2
+	if !parent0.breedable:
+		return
+	if !parent1.breedable:
+		return
 	var rat = rat_construct()
 	if rat == null:
 		return
+	parent0.breeded()
+	parent1.breeded()
 	rat.gen_mixer(parent0,parent1)
 	rat.new_rat()
 	add_child(rat)

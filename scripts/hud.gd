@@ -18,9 +18,9 @@ func _ready():
 	add_child(rlabel_timer)
 	rlabel_timer.timeout.connect(rlabel_timer_timeout)
 	bgroup1 = %Food.get_button_group()
-
 	if %Food.get_meta("Dict")["flag"] == false:
 		%BrushB.icon = load("res://art/object2/brushbd.png")
+	%Food.disabled = true
 
 func _process(delta):
 	pass
@@ -77,19 +77,18 @@ func mix_closed_pressed():
 	%Panel.visible = false
 func buy_rat():
 	if int(%CostRat.text) <= GlobalFuncNVar.money:
-		if !GlobalFuncNVar.can_buy_rat:
+		if GlobalFuncNVar.rats_arr.size() >= GlobalFuncNVar.max_rats:
 			return
 		spawnrat.emit(int(%CostRat.text))
 		money_update()
 func buy_item():
 	if  !is_instance_valid(bgroup1.get_pressed_button()):
 		return
-	if bgroup1.get_pressed_button().get_meta("cost") <= GlobalFuncNVar.money and bgroup1.get_pressed_button().get_meta("Dict")["flag"] != true:
+	if bgroup1.get_pressed_button().get_meta("cost") <= GlobalFuncNVar.money and bgroup1.get_pressed_button().get_meta("Dict")["flag"] != true:	
 		GlobalFuncNVar.money -= bgroup1.get_pressed_button().get_meta("cost")
 		money_update()
 		bgroup1.get_pressed_button().get_meta("Dict")["flag"] = true
-		items_update(bgroup1.get_pressed_button().get_meta("Dict")["name"],bgroup1.get_pressed_button().get_meta("Dict")["flag"])
-	
+		items_update(bgroup1.get_pressed_button().get_meta("Dict")["name"],bgroup1.get_pressed_button().get_meta("Dict")["flag"])	
 func show_cost_items():	
 	%CostItem.text = "COST: " + str(bgroup1.get_pressed_button().get_meta("cost"))
 func items_update(item_name, flag):
@@ -114,54 +113,34 @@ func items_update(item_name, flag):
 		"Tube":
 				GlobalFuncNVar.Tube_buy.emit()
 		"Bowl":
+				%Food.disabled = false
 				GlobalFuncNVar.Bowl_buy.emit()
 		_:
 			pass						
-
-
 func _on_make_child_pressed():
 	if %OB0.get_selected_id() == %OB1.get_selected_id():
 		return
 	make_child.emit(GlobalFuncNVar.rats_arr[%OB0.get_selected_id()],GlobalFuncNVar.rats_arr[%OB1.get_selected_id()])
 	option_buttons_update()
-func rat_bar_update():
-	
+func rat_bar_update():	
 	var state = GlobalFuncNVar.rats_arr.size()
-	print(state)
-	if state == 0:
-		%ratrect0.visible = false
-		%ratrect1.visible = false
-		return
-	if state > 0:
-		%ratrect0.visible = true
-	if state > 1 and state <=8:
-		%ratrect0.scale.x += 1
-	if state > 8:
-		%ratrect1.visible = true
-	if state > 9 and state <=16:
-		%ratrect1.scale.x += 1
+	if GlobalFuncNVar.rats_arr.size() <= 8:
+		%ratrect0.scale.x = 0.037 + float(GlobalFuncNVar.rats_arr.size())
+		%ratrect1.scale.x = 0.0
+	if GlobalFuncNVar.rats_arr.size() >= 9 and GlobalFuncNVar.rats_arr.size() <= 16:
+		%ratrect1.scale.x = -8.038 + float(GlobalFuncNVar.rats_arr.size())
+
 func food_bar_update():
 	%foodrect.scale.x = GlobalFuncNVar.food
-
-
-
-
-
 func _on_food_timer_timeout():
-	if GlobalFuncNVar.food > 0:
+	if GlobalFuncNVar.food > 0 and !GlobalFuncNVar.rats_arr.is_empty():
 		GlobalFuncNVar.food -= 1
 		food_bar_update()
 		%Food.get_meta("Dict")["flag"] = false
-
-		
-
-
 func _on_shop_tab_changed(tab):
 	%OB3.clear()
 	for i in GlobalFuncNVar.rats_arr:
 		%OB3.add_item(i.rat_name)
-
-
 func _on_sell_pressed():
 	var id = %OB3.get_selected_id()
 	if id == -1:
@@ -175,5 +154,6 @@ func _on_sell_pressed():
 	money_update()
 	GlobalFuncNVar.rats_arr[id].queue_free() 
 	GlobalFuncNVar.rats_arr.remove_at(id)
+	rat_bar_update()
 	_on_shop_tab_changed(%OB3.get_selected())
-#queue_free() 
+

@@ -234,6 +234,7 @@ columns = 4
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+disabled = true
 toggle_mode = true
 button_group = ExtResource("7_sx5ic")
 texture_normal = ExtResource("7_qy6nw")
@@ -505,6 +506,7 @@ flat = true
 icon_alignment = 1
 
 [node name="RatsSell" type="TabBar" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Shop"]
+visible = false
 layout_mode = 2
 theme = SubResource("Theme_wi72u")
 theme_override_styles/tab_disabled = SubResource("StyleBoxTexture_nn1m5")
@@ -669,14 +671,13 @@ texture = ExtResource("23_gcugs")
 
 [node name="ratrect0" type="ColorRect" parent="Control/MarginContainer/VBoxContainer2/HBoxContainer/ratbar"]
 unique_name_in_owner = true
-visible = false
 show_behind_parent = true
 layout_mode = 0
 offset_left = 9.0
 offset_top = 31.0
 offset_right = 49.0
 offset_bottom = 71.0
-scale = Vector2(1.037, 1.1)
+scale = Vector2(0.037, 1.1)
 color = Color(0.294118, 0.356863, 0.670588, 1)
 
 [node name="ratrect1" type="ColorRect" parent="Control/MarginContainer/VBoxContainer2/HBoxContainer/ratbar"]
@@ -687,11 +688,12 @@ offset_left = 9.0
 offset_top = 87.0
 offset_right = 49.0
 offset_bottom = 127.0
-scale = Vector2(1.03738, 1.1)
+scale = Vector2(0.037, 1.1)
 color = Color(0.294118, 0.356863, 0.670588, 1)
 
 [node name="FoodTimer" type="Timer" parent="."]
-wait_time = 7.0
+unique_name_in_owner = true
+wait_time = 15.0
 autostart = true
 
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer2/Mix" to="." method="_on_mix_pressed"]

@@ -14,7 +14,7 @@ func _ready():
 	%Bush.pause()
 	%Tramp.pause()
 	%Tube.pause()
-
+	%Tramp.play()
 	
 func start_animation(name):
 	match(name):

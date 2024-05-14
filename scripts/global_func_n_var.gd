@@ -12,7 +12,7 @@ signal obj_start_animation(name : String)
 
 
 var body_parts_dic = {0:"bodys",1:"legs",2:"tails",3:"eyes",4:"ears",5:"noses"}
-
+var FoodTime : float = 187.0
 var rats_arr : Array
 var screen_size 
 var rat_on_path : bool

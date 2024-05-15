@@ -9,7 +9,8 @@ signal House_buy
 signal Bowl_buy
 signal Bowl_food
 signal obj_start_animation(name : String)
-
+signal tramp_frame(frame : int)
+signal food_in_bowl(state : bool)
 
 var body_parts_dic = {0:"bodys",1:"legs",2:"tails",3:"eyes",4:"ears",5:"noses"}
 var FoodTime : float = 187.0

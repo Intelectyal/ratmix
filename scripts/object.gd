@@ -10,11 +10,13 @@ func _ready():
 	GlobalFuncNVar.House_buy.connect(House_update)
 	GlobalFuncNVar.Bowl_buy.connect(Bowl_update)
 	GlobalFuncNVar.obj_start_animation.connect(start_animation)
+	GlobalFuncNVar.tramp_frame.connect(Tramp_frame)
+	GlobalFuncNVar.food_in_bowl.connect(Bowl_food)
 	%Wheel.pause()
 	%Bush.pause()
 	%Tramp.pause()
 	%Tube.pause()
-	%Tramp.play()
+
 	
 func start_animation(name):
 	match(name):
@@ -23,7 +25,8 @@ func start_animation(name):
 		"Bush":
 			%Bush.play()
 		"Tramp":
-			%Tramp.play()
+			#%Tramp.play()
+			pass
 		"Tube":
 			%Tube.play()	
 		_:
@@ -46,9 +49,13 @@ func House_update():
 	GlobalFuncNVar.objs_list["House"] = true
 func Bowl_update():
 	%Bowl.visible = true
-
-func Bowl_food():
-	pass
+func Tramp_frame(frame):
+	%Tramp.set_frame_and_progress(frame,0.0)
+func Bowl_food(state):
+	if state > 0:
+		%Bowl.set_frame_and_progress(1,0.0)
+	else:
+		%Bowl.set_frame_and_progress(0,0.0)
 
 func _process(delta):
 	pass

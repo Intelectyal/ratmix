@@ -24,6 +24,7 @@ resource_name = "bush"
 
 [sub_resource type="Animation" id="Animation_mcgcc"]
 resource_name = "tramp"
+length = 6.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -31,10 +32,33 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(1.5, 3, 4.5, 6),
+"transitions": PackedFloat32Array(0.116629, 0.31864, 3.4822, 1),
 "update": 0,
-"values": [Vector2(168, 712)]
+"values": [Vector2(168, 712), Vector2(168, 722), Vector2(168, 504), Vector2(168, 712)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 1.7, 3.2, 5.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [0],
+"method": &"tramp_emit"
+}, {
+"args": [1],
+"method": &"tramp_emit"
+}, {
+"args": [2],
+"method": &"tramp_emit"
+}, {
+"args": [3],
+"method": &"tramp_emit"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_qcbup"]
@@ -59,7 +83,7 @@ input_pickable = true
 script = ExtResource("1_bnijq")
 
 [node name="Goto" type="Timer" parent="."]
-wait_time = 8.0
+wait_time = 10.0
 autostart = true
 
 [node name="body" type="Sprite2D" parent="."]
@@ -86,7 +110,8 @@ position = Vector2(1, 1)
 
 [node name="spots" type="Sprite2D" parent="."]
 
-[node name="Rat_breth" type="AnimationPlayer" parent="."]
+[node name="Rat_anim" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
 autoplay = "breath"
 libraries = {
 "": SubResource("AnimationLibrary_81vt2")
@@ -103,4 +128,5 @@ debug_color = Color(0.886275, 0.262745, 0.521569, 0.419608)
 
 [connection signal="input_event" from="." to="." method="_on_character_body_2d_input_event"]
 [connection signal="timeout" from="Goto" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="Rat_anim" to="." method="_on_rat_anim_animation_finished"]
 [connection signal="timeout" from="Breedable" to="." method="_on_breedable_timeout"]

@@ -123,7 +123,6 @@ func _on_make_child_pressed():
 	make_child.emit(GlobalFuncNVar.rats_arr[%OB0.get_selected_id()],GlobalFuncNVar.rats_arr[%OB1.get_selected_id()])
 	option_buttons_update()
 func rat_bar_update():	
-	var state = GlobalFuncNVar.rats_arr.size()
 	if GlobalFuncNVar.rats_arr.size() <= 8:
 		%ratrect0.scale.x = 0.037 + float(GlobalFuncNVar.rats_arr.size())
 		%ratrect1.scale.x = 0.0
@@ -132,6 +131,7 @@ func rat_bar_update():
 
 func food_bar_update():
 	%foodrect.scale.x = GlobalFuncNVar.food
+	GlobalFuncNVar.food_in_bowl.emit(GlobalFuncNVar.food)
 func _on_food_timer_timeout():
 	if GlobalFuncNVar.food > 0 and !GlobalFuncNVar.rats_arr.is_empty():
 		GlobalFuncNVar.food -= 1

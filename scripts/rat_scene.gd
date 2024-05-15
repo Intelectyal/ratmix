@@ -33,7 +33,7 @@ func _on_timer_timeout():
 	if true:
 		#var i = GlobalFuncNVar.roulette(10)
 		var i = randi_range(0,2)
-		#var i = 3
+#		var i = 2
 		match (i):
 			0:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
@@ -57,6 +57,8 @@ func _on_timer_timeout():
 							run_state = 2
 							target = GlobalFuncNVar.objs_coord[j]
 							return
+			_:
+				pass
 			
 	pass
 
@@ -90,19 +92,21 @@ func rat_run(delta):
 	else:
 		velocity = Vector2(0.0,0.0)
 		if run_state == 2: 
-			#GlobalFuncNVar.objs_list[rat_on_obj]=true
-			GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
+			#GlobalFuncNVar.objs_list[rat_on_obj]=true 
 			anim_flag_change()
+			pass
 		if run_state == 1 and number_of_pos <= 3:
 			number_of_pos += 1
 			
 func anim_obj():
-	#print("АНИМАЦИЮ УКРАЛИ")
+	%Rat_anim.play("tramp")
+	print(rat_on_obj)
+	GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
 	pass
 
 func _physics_process(delta):	
 	rat_run(delta)
-	if anim_flag_change:
+	if obj_anim_flag:
 		anim_obj()
 
 func _on_character_body_2d_input_event(viewport, event, shape_idx):
@@ -182,3 +186,12 @@ func choose_parent(a,b):
 				return a
 			2:
 				return b	 
+
+
+func _on_rat_anim_animation_finished(anim_name):
+	anim_flag_change()
+	run_state = 0
+	GlobalFuncNVar.objs_list[rat_on_obj] = true
+func tramp_emit(frame):
+	GlobalFuncNVar.tramp_frame.emit(frame)
+	pass

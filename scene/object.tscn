@@ -1,7 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://c6hceidnjxq85"]
+[gd_scene load_steps=26 format=3 uid="uid://c6hceidnjxq85"]
 
 [ext_resource type="Script" path="res://scripts/object.gd" id="1_5bbwb"]
+[ext_resource type="Texture2D" uid="uid://bnoidqq5tp2cq" path="res://art/object for rat/Selection 2024-02-11T17.07.12.png" id="2_qpn4w"]
+[ext_resource type="Texture2D" uid="uid://gax33rc87jny" path="res://art/object for rat/Selection 2024-02-11T17.07.21.png" id="3_s6bnf"]
 [ext_resource type="Texture2D" uid="uid://dalg3r0imnory" path="res://art/object for rat/Bowl0.png" id="3_sebib"]
+[ext_resource type="Texture2D" uid="uid://dlym37s7o1jgl" path="res://art/object for rat/Selection 2024-02-11T17.07.33.png" id="4_2mjys"]
+[ext_resource type="Texture2D" uid="uid://cevxtrbemhffh" path="res://art/object for rat/Selection 2024-02-11T17.07.42.png" id="5_qvojt"]
 [ext_resource type="Texture2D" uid="uid://bx4dae15mwft5" path="res://art/object for rat/Selection 2024-02-11T18.32.44.png" id="6_yj7e5"]
 [ext_resource type="Texture2D" uid="uid://0mnuemn70mqq" path="res://art/object for rat/Selection 2024-02-11T18.32.55.png" id="7_tktjg"]
 [ext_resource type="Texture2D" uid="uid://8r3oat8s4rlj" path="res://art/object for rat/Selection 2024-02-11T18.33.03.png" id="8_m308o"]
@@ -21,10 +25,16 @@
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_hxmbq")
+"texture": ExtResource("2_qpn4w")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_sebib")
+"texture": ExtResource("3_s6bnf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2mjys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_qvojt")
 }],
 "loop": true,
 "name": &"default",
@@ -91,17 +101,32 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_usdcv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_hxmbq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_sebib")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Object" type="Node2D"]
 script = ExtResource("1_5bbwb")
 
 [node name="Wheel" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
 visible = false
-position = Vector2(1728, 904)
+position = Vector2(1640, 848)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_tf6ky")
 autoplay = "default"
-frame_progress = 0.408078
+frame = 3
+frame_progress = 0.110903
 
 [node name="Bush" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
@@ -125,7 +150,7 @@ frame_progress = 0.969136
 [node name="Tube" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
 visible = false
-position = Vector2(1536, 648)
+position = Vector2(1232, 648)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_b4aqo")
 autoplay = "default"
@@ -142,5 +167,4 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(1288, 928)
 scale = Vector2(0.21, 0.21)
-sprite_frames = SubResource("SpriteFrames_tf6ky")
-frame_progress = 0.408078
+sprite_frames = SubResource("SpriteFrames_usdcv")

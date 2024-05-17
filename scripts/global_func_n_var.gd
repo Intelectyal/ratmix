@@ -9,6 +9,7 @@ signal House_buy
 signal Bowl_buy
 signal Bowl_food
 signal obj_start_animation(name : String)
+signal obj_stop_animation(name : String)
 signal tramp_frame(frame : int)
 signal food_in_bowl(state : bool)
 

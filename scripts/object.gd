@@ -10,6 +10,7 @@ func _ready():
 	GlobalFuncNVar.House_buy.connect(House_update)
 	GlobalFuncNVar.Bowl_buy.connect(Bowl_update)
 	GlobalFuncNVar.obj_start_animation.connect(start_animation)
+	GlobalFuncNVar.obj_stop_animation.connect(stop_animation)
 	GlobalFuncNVar.tramp_frame.connect(Tramp_frame)
 	GlobalFuncNVar.food_in_bowl.connect(Bowl_food)
 	%Wheel.pause()
@@ -29,6 +30,20 @@ func start_animation(name):
 			pass
 		"Tube":
 			%Tube.play()	
+		_:
+			pass	
+			
+func stop_animation(name):
+	match(name):
+		"Wheel":
+			%Wheel.pause()
+		"Bush":
+			%Bush.pause()
+		"Tramp":
+			#%Tramp.play()
+			pass
+		"Tube":
+			%Tube.pause()	
 		_:
 			pass	
 

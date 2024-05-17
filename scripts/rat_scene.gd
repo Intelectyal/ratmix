@@ -32,8 +32,9 @@ func breeded():
 func _on_timer_timeout():
 	if true:
 		#var i = GlobalFuncNVar.roulette(10)
-		var i = randi_range(0,2)
-#		var i = 2
+#		var i = randi_range(2,2)
+		var i = 2
+		print("ХУЙ")
 		match (i):
 			0:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
@@ -50,13 +51,15 @@ func _on_timer_timeout():
 							number_of_pos = 0
 			2:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
-					for j in GlobalFuncNVar.objs_list:
-						if GlobalFuncNVar.objs_list[j]:
-							GlobalFuncNVar.objs_list[j]=false
-							rat_on_obj = j
-							run_state = 2
-							target = GlobalFuncNVar.objs_coord[j]
-							return
+					if !obj_anim_flag:
+						for j in GlobalFuncNVar.objs_list:
+							if GlobalFuncNVar.objs_list[j]:
+								GlobalFuncNVar.objs_list[j]=false
+								print("ХУЙ")
+								rat_on_obj = j
+								run_state = 2
+								target = GlobalFuncNVar.objs_coord[j]
+								return
 			_:
 				pass
 			
@@ -99,7 +102,15 @@ func rat_run(delta):
 			number_of_pos += 1
 			
 func anim_obj():
-	%Rat_anim.play("tramp")
+	match rat_on_obj:
+		"Wheel":
+			%Rat_anim.play("wheel")
+		"Bush":
+			%Rat_anim.play("bush")
+		"Tramp":
+			%Rat_anim.play("tramp")
+		"Tube":
+			%Rat_anim.play("Tube")
 	print(rat_on_obj)
 	GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
 	pass
@@ -190,6 +201,7 @@ func choose_parent(a,b):
 
 func _on_rat_anim_animation_finished(anim_name):
 	anim_flag_change()
+	GlobalFuncNVar.obj_stop_animation.emit(rat_on_obj)
 	run_state = 0
 	GlobalFuncNVar.objs_list[rat_on_obj] = true
 func tramp_emit(frame):

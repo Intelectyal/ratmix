@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1cqdgafqudth"]
+[gd_scene load_steps=10 format=3 uid="uid://b1cqdgafqudth"]
 
 [ext_resource type="Script" path="res://scripts/rat_scene.gd" id="1_bnijq"]
 
@@ -28,22 +28,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_a5crr"]
-resource_name = "breath"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0.52, 0.48), Vector2(0.5, 0.5), Vector2(0.48, 0.52), Vector2(0.5, 0.5), Vector2(0.52, 0.48)]
 }
 
 [sub_resource type="Animation" id="Animation_qr63u"]
@@ -117,10 +101,43 @@ tracks/0/keys = {
 "values": [Vector2(1648, 840), Vector2(1652, 836), Vector2(1654, 840), Vector2(1648, 840), Vector2(1652, 836), Vector2(1654, 840), Vector2(1648, 840), Vector2(1652, 836), Vector2(1654, 840), Vector2(1648, 840)]
 }
 
+[sub_resource type="Animation" id="Animation_a5crr"]
+resource_name = "breath"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.52, 0.48), Vector2(0.5, 0.5), Vector2(0.48, 0.51), Vector2(0.5, 0.5), Vector2(0.52, 0.48)]
+}
+
+[sub_resource type="Animation" id="Animation_fqtos"]
+resource_name = "breath_child"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.27, 0.23), Vector2(0.25, 0.25), Vector2(0.23, 0.26), Vector2(0.25, 0.25), Vector2(0.27, 0.23)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_81vt2"]
 _data = {
 "Tube": SubResource("Animation_nacm1"),
-"breath": SubResource("Animation_a5crr"),
+"breath_adult": SubResource("Animation_a5crr"),
+"breath_child": SubResource("Animation_fqtos"),
 "bush": SubResource("Animation_qr63u"),
 "tramp": SubResource("Animation_mcgcc"),
 "wheel": SubResource("Animation_qcbup")
@@ -130,14 +147,14 @@ _data = {
 radius = 20.188
 
 [node name="Rat_body" type="CharacterBody2D"]
-position = Vector2(168, 712)
-scale = Vector2(0.52, 0.48)
+position = Vector2(1120, 664)
+scale = Vector2(0.5, 0.5)
 collision_layer = 2
 input_pickable = true
 script = ExtResource("1_bnijq")
 
 [node name="Goto" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 15.0
 autostart = true
 
 [node name="body" type="Sprite2D" parent="."]
@@ -170,16 +187,29 @@ libraries = {
 "": SubResource("AnimationLibrary_81vt2")
 }
 
+[node name="Rat_breath" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+speed_scale = 0.7
+libraries = {
+"": SubResource("AnimationLibrary_81vt2")
+}
+
 [node name="Breedable" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 3600.0
+one_shot = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(3.64876, 3.22593)
 shape = SubResource("CircleShape2D_eonfk")
 debug_color = Color(0.886275, 0.262745, 0.521569, 0.419608)
 
+[node name="Adult" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 30.0
+
 [connection signal="input_event" from="." to="." method="_on_character_body_2d_input_event"]
 [connection signal="timeout" from="Goto" to="." method="_on_timer_timeout"]
 [connection signal="animation_finished" from="Rat_anim" to="." method="_on_rat_anim_animation_finished"]
 [connection signal="timeout" from="Breedable" to="." method="_on_breedable_timeout"]
+[connection signal="timeout" from="Adult" to="." method="_on_adult_timeout"]

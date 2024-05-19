@@ -12,6 +12,7 @@ var bgroup1
 var list_names : Array 
 
 func _ready():
+	%FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
 	food_bar_update()
 	rat_bar_update()
 	add_child(rat_label)
@@ -152,6 +153,8 @@ func _on_sell_pressed():
 	else:
 		GlobalFuncNVar.money += 1200
 	money_update()
+	GlobalFuncNVar.FoodTime += 7.0
+	%FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
 	GlobalFuncNVar.rats_arr[id].queue_free() 
 	GlobalFuncNVar.rats_arr.remove_at(id)
 	rat_bar_update()

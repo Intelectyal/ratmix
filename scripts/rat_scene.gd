@@ -32,8 +32,8 @@ func breeded():
 func _on_timer_timeout():
 	if true:
 		#var i = GlobalFuncNVar.roulette(10)
-#		var i = randi_range(2,2)
-		var i = 2
+		var i = randi_range(0,2)
+#		var i = 2
 		match (i):
 			0:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
@@ -111,12 +111,10 @@ func anim_obj():
 			%Rat_anim.play("tramp")
 		"Tube":
 			%Rat_anim.play("Tube")
-	print(rat_on_obj)
 	GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
 
 func _physics_process(delta):	
 	rat_run(delta)
-	print(%Rat_anim.is_playing()," || ", obj_anim_flag," || ", GlobalFuncNVar.objs_list["Tramp"])
 	if obj_anim_flag:
 		anim_obj()
 
@@ -207,3 +205,13 @@ func _on_rat_anim_animation_finished(anim_name):
 func tramp_emit(frame):
 	GlobalFuncNVar.tramp_frame.emit(frame)
 	pass
+
+func child():
+	breedable = false
+	%Rat_breath.play("breath_child")
+	scale = Vector2(0.25 , 0.25)
+	%Adult.start()
+func _on_adult_timeout():
+	breedable = true
+	scale = Vector2(0.5 , 0.5)
+	%Rat_breath.play("breath_adult")

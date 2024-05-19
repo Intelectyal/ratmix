@@ -49,6 +49,7 @@ func _on_hud_make_child(parent0 : Object,parent1 : Object): #тестовая к
 	rat.new_rat()
 	add_child(rat)
 	rat.randomspawn()
+	rat.child()
 
 func _on_hud_spawnrat(cost): #СПАВНИТ КРЫСУ ПО НАЖАТИЮ КНОПКИ
 	var rat = rat_construct()

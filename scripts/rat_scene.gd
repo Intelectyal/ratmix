@@ -34,7 +34,6 @@ func _on_timer_timeout():
 		#var i = GlobalFuncNVar.roulette(10)
 #		var i = randi_range(2,2)
 		var i = 2
-		print("ХУЙ")
 		match (i):
 			0:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
@@ -55,10 +54,10 @@ func _on_timer_timeout():
 						for j in GlobalFuncNVar.objs_list:
 							if GlobalFuncNVar.objs_list[j]:
 								GlobalFuncNVar.objs_list[j]=false
-								print("ХУЙ")
 								rat_on_obj = j
 								run_state = 2
 								target = GlobalFuncNVar.objs_coord[j]
+								anim_flag_change()
 								return
 			_:
 				pass
@@ -96,12 +95,13 @@ func rat_run(delta):
 		velocity = Vector2(0.0,0.0)
 		if run_state == 2: 
 			#GlobalFuncNVar.objs_list[rat_on_obj]=true 
-			anim_flag_change()
 			pass
 		if run_state == 1 and number_of_pos <= 3:
 			number_of_pos += 1
 			
 func anim_obj():
+	if position.distance_to(target) > 10:
+		return
 	match rat_on_obj:
 		"Wheel":
 			%Rat_anim.play("wheel")
@@ -113,10 +113,10 @@ func anim_obj():
 			%Rat_anim.play("Tube")
 	print(rat_on_obj)
 	GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
-	pass
 
 func _physics_process(delta):	
 	rat_run(delta)
+	print(%Rat_anim.is_playing()," || ", obj_anim_flag," || ", GlobalFuncNVar.objs_list["Tramp"])
 	if obj_anim_flag:
 		anim_obj()
 

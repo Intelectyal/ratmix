@@ -1,5 +1,5 @@
 
-var  mutation_chance = 101
+var  mutation_chance = 15
 
 var color = GlobalFuncNVar.grey
 

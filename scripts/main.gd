@@ -53,6 +53,7 @@ func _on_hud_make_child(parent0 : Object,parent1 : Object): #тестовая к
 
 func _on_hud_spawnrat(cost): #СПАВНИТ КРЫСУ ПО НАЖАТИЮ КНОПКИ
 	var rat = rat_construct()
+	rat.forced_breath()
 	GlobalFuncNVar.money -= cost
 	add_child(rat)
 

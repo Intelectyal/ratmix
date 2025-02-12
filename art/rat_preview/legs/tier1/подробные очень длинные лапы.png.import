@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5gxwx7rbhob4"
-path="res://.godot/imported/photo_2023-10-12_16-39-53.jpg-5e9ceaca2ab3d49fe1d27c569b8c07ae.ctex"
+uid="uid://tc58k3i6gyi7"
+path="res://.godot/imported/подробные очень длинные лапы.png-caad4b91b2804b42df2486f884ee20c9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/photo_2023-10-12_16-39-53.jpg"
-dest_files=["res://.godot/imported/photo_2023-10-12_16-39-53.jpg-5e9ceaca2ab3d49fe1d27c569b8c07ae.ctex"]
+source_file="res://art/rat_preview/legs/tier1/подробные очень длинные лапы.png"
+dest_files=["res://.godot/imported/подробные очень длинные лапы.png-caad4b91b2804b42df2486f884ee20c9.ctex"]
 
 [params]
 

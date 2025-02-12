@@ -1,5 +1,6 @@
 extends Node
 
+signal rats_cost
 signal shelf_buy
 signal Wheel_buy
 signal Bush_buy
@@ -13,7 +14,7 @@ signal obj_stop_animation(name : String)
 signal tramp_frame(frame : int)
 signal food_in_bowl(state : bool)
 
-var body_parts_dic = {0:"bodys",1:"legs",2:"tails",3:"eyes",4:"ears",5:"noses"}
+
 var FoodTime : float = 187.0
 var rats_arr : Array
 var screen_size 
@@ -29,7 +30,7 @@ var can_buy_rat : bool
 var shelf_is_buy : bool
 var objs_list = {"Wheel":false,"Bush":false,"Tramp":false,"Tube":false,"House":false}
 var objs_coord = {"Wheel":Vector2(1728,904),"Bush":Vector2(328,936),"Tramp":Vector2(176,728),"Tube":Vector2(1536,648),"House":Vector2(1784,584)}
-
+var GuiFlag : bool = false
 
 var ears_base = {
 	"fur" : "res://art/rat/ears/tier0/0fur.png",
@@ -66,12 +67,14 @@ var eyes_tier1_1 = {
 var eyes_tier1_2 = {
 	"skin" : "res://art/rat/eyes/tier1/2.png"
 }
-
+var eyes_tier3_1 = { #заполнить
+	"skin" : "res://art/rat/eyes/tier3/1.png"
+}
 var eyes_tier2_1 = {
 	"skin" : "res://art/rat/eyes/tier2/1.png"
 }
 var eyes_tier2_2 = {
-	"skin" : ""
+	"skin" : "res://art/rat/eyes/tier2/null"
 }
 var legs_base = {
 	"skin" : "res://art/rat/legs/tier0/0skin.png",
@@ -110,6 +113,10 @@ var nose_tier2_1 = {
 	"fur" :  "res://art/rat/noses/tier2/1fur.png",
 	"skin" : "res://art/rat/noses/tier2/1skin.png"
 }
+var nose_tier1_2 = { #Эксперементы если дать неправильную ссылку на ресурс
+	"fur" :  "",
+	"skin" : "res://art/rat/noses/tier2/1.png"
+}
 
 var tail_base = {
 	"fur" : "res://art/rat/tails/tier0/0fur.png",
@@ -144,6 +151,26 @@ var body_fluffy = {
 var spots = {
 	"fur" : "res://art/rat/over/tier1/1.png"
 }
+
+var mouth_base = {
+	"fur" : "res://art/rat/mouth/tier0/null",
+	"skin" : "res://art/rat/mouth/tier0/null"
+}
+var horns_base = {
+	"fur" : "res://art/rat/horns/tier0/null",
+	"skin" : "res://art/rat/horns/tier0/null"
+}
+var wings_base = {
+	"fur" : "res://art/rat/wings/tier0/null",
+	"skin" : "res://art/rat/wings/tier0/null"
+}
+var mouth_tier1_1 = {}
+var mouth_tier2_1= {}
+var horns_tier1_1= {}
+var horns_tier2_1= {}
+var horns_tier2_2= {}
+var wings_tier1_1 = {}
+var wings_tier2_1 = {}
 
 var grey = { #серый
 	"summable": [],
@@ -258,15 +285,24 @@ func _ready():
 	eyes_base["neighb"] = [eyes_tier1_1,eyes_tier1_2]
 	eyes_tier1_1["neighb"] = [eyes_tier2_1]
 	eyes_tier1_2["neighb"] = [eyes_tier2_2]
+	eyes_tier2_1["neighb"] = [eyes_tier3_1]
 	legs_base["neighb"] = [legs_tier1_1,legs_tier1_2,legs_tier1_3]
 	legs_tier1_1["neighb"] =[legs_tier2_2]
 	legs_tier1_2["neighb"] = [legs_tier2_1]
 	legs_tier1_3["neighb"] = [legs_tier2_1]
-	nose_base["neighb"] = [nose_tier1_1]
+	nose_base["neighb"] = [nose_tier1_1,nose_tier1_2]
 	nose_tier1_1["neighb"] = [nose_tier2_1]
 	tail_base["neighb"] = [tail_tier1_1,tail_tier1_2,tail_tier1_3]
 	tail_tier1_1["neighb"] = [tail_tier2_1]
 	tail_tier1_2["neighb"] = [tail_tier2_2]
+	
+	
+	mouth_base["neighb"] = [mouth_tier1_1]
+	mouth_tier1_1["neighb"] = [mouth_tier2_1]
+	horns_base["neighb"] = [horns_tier1_1]
+	horns_tier1_1["neighb"] = [horns_tier2_1,horns_tier2_2]
+	wings_base["neighb"] = [wings_tier1_1]
+	wings_tier1_1["neighb"] = [wings_tier2_1]
 	
 	grey["neighb"] = [light_grey,black,brown,semi_bald]
 	light_grey["neighb"] = [white]
@@ -303,12 +339,12 @@ func get_txt(mystr : String, arr : Array):
 	var i = 0 
 	var n = 0
 	while i < (mystr.length()-6):
-		while mystr[i] != "\r":
+		while mystr[i] != "\r": #ХЗ почему но на рабочем компе пкрашится. i = 282 и выходит за массив, если не исправить на "\n" 
 			arr[n] += mystr[i]
 			i += 1
 		n += 1
 		i += 1
-	for c in arr.size():
+	for c in arr.size(): #БТВ к тому же нужен этот кусок кода не нужен на рабочем компе. Возможно дело в версиях годота 4.1.2 дома
 		arr[c] = arr[c].replace("\n","")
 
 

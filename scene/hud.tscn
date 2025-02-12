@@ -179,7 +179,6 @@ alignment = 1
 
 [node name="Shop" type="TabContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(768, 768)
 layout_mode = 2
 theme = ExtResource("3_epkro")
@@ -588,6 +587,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
+offset_right = -6.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -612,6 +613,108 @@ layout_mode = 2
 [node name="OB1" type="OptionButton" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 160.0
+offset_right = 1066.0
+offset_bottom = 672.0
+scale = Vector2(0.68579, 0.654539)
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3"]
+layout_mode = 2
+alignment = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2"]
+layout_mode = 2
+
+[node name="SubViewport0" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer"]
+unique_name_in_owner = true
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="body" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="ears_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="ears_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="eyes" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="legs_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="legs_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="nose_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="nose_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="tail_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="tail_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="spots" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer/SubViewport0/CenterContainer"]
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2"]
+layout_mode = 2
+
+[node name="SubViewport1" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2"]
+unique_name_in_owner = true
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="body" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="ears_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="ears_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="eyes" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="legs_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="legs_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="nose_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="nose_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="tail_s" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="tail_f" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
+
+[node name="spots" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer3/HBoxContainer2/SubViewportContainer2/SubViewport1/CenterContainer"]
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control"]
 layout_mode = 1
@@ -715,6 +818,10 @@ autostart = true
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Shop/RatsBuy/Control/MarginContainer/VBoxContainer/HBoxContainer2/Exit" to="." method="store_closed_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Shop/RatsSell/Control/VBoxContainer2/MarginContainer/HBoxContainer/Sell" to="." method="_on_sell_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Shop/RatsSell/Control/VBoxContainer2/MarginContainer/HBoxContainer/Exit" to="." method="store_closed_pressed"]
+[connection signal="item_focused" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB0" to="." method="_on_ob_0_item_focused"]
+[connection signal="item_selected" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB0" to="." method="_on_ob_0_item_selected"]
+[connection signal="item_focused" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB1" to="." method="_on_ob_1_item_focused"]
+[connection signal="item_selected" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB1" to="." method="_on_ob_1_item_selected"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Make child" to="." method="_on_make_child_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Exit" to="." method="mix_closed_pressed"]
 [connection signal="timeout" from="FoodTimer" to="." method="_on_food_timer_timeout"]

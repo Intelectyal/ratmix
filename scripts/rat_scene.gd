@@ -16,11 +16,13 @@ var number_of_pos : int = -1
 var rat_on_obj
 var obj_anim_flag : bool = false
 var breedable : bool = true
+var cost : int = 0
 
 func _ready():
 	name_generator()
 	randomspawn()
 	rat_generate()
+	GlobalFuncNVar.rats_cost.connect(cost_calculation)
 
 func anim_flag_change():
 	obj_anim_flag = !obj_anim_flag
@@ -65,6 +67,8 @@ func _on_timer_timeout():
 	pass
 
 func _input(event):
+	if GlobalFuncNVar.GuiFlag:
+		return
 	if event.is_action_pressed("mouse_left") and event.double_click and number_of_pos == -1 and run_state != 2:
 		target = get_global_mouse_position()
 		counter_pos = position
@@ -94,7 +98,7 @@ func rat_run(delta):
 	else:
 		velocity = Vector2(0.0,0.0)
 		if run_state == 2: 
-			#GlobalFuncNVar.objs_list[rat_on_obj]=true 
+			GlobalFuncNVar.objs_list[rat_on_obj]=true 
 			pass
 		if run_state == 1 and number_of_pos <= 3:
 			number_of_pos += 1
@@ -155,6 +159,9 @@ func new_rat():
 	$tail_f.texture = ResourceLoader.load(genes.DNA[5]["fur"])
 	$tail_s.texture = ResourceLoader.load(genes.DNA[5]["skin"])
 	$tail_f.modulate = genes.color["value"]	
+#	$horns.texture = ResourceLoader.load()
+#	$mouth.texture = ResourceLoader.load()
+#	$wings.texture = ResourceLoader.load()
 	
 	
 func gen_mixer(rat1 : Object, rat2 : Object):
@@ -208,10 +215,49 @@ func tramp_emit(frame):
 
 func child():
 	breedable = false
-	%Rat_breath.play("breath_child")
+	%Rat_anim2.play("breath_child")
 	scale = Vector2(0.25 , 0.25)
 	%Adult.start()
 func _on_adult_timeout():
 	breedable = true
+#	%Rat_anim2.stop()
 	scale = Vector2(0.5 , 0.5)
-	%Rat_breath.play("breath_adult")
+	%Rat_anim2.play("breath_adult")
+func forced_breath():
+	%Rat_anim2.play("breath_adult")
+
+func cost_calculation():
+	var cost_array : Array
+	if cost != 0:
+		return
+	print(genes.DNA.size())
+	for i in genes.DNA.size():
+		if genes.DNA[i].get("skin") != null:
+			cost_array.append(get_digit_before_last_slash(genes.DNA[i].get("skin")))
+		elif genes.DNA[i].get("fur") != null:
+			cost_array.append(get_digit_before_last_slash(genes.DNA[i].get("fur")))
+		elif (genes.DNA[i].get("fur") == null and genes.DNA[i].get("skin") == null):
+			cost_array.append(-1)
+	cost = (100*(cost_array[0]+0.5)+100*(cost_array[1]+0.5)+100*(cost_array[2]+0.5)+100*(cost_array[3]+0.5)+100*(cost_array[4]+0.5)+100*(cost_array[5]+0.5)+
++100*(cost_array[6]+0.5)+100*(cost_array[7]+0.5)+100*(cost_array[8]+0.5))
+	print(cost,"\n",cost_array)
+
+func get_digit_before_last_slash(path: String) -> int:
+	var last_slash_index = path.rfind("/")
+	if last_slash_index == -1:
+		return -1
+	var digit_str = ""
+	for i in range(last_slash_index - 1, -1, -1):
+		if path[i].is_valid_int():
+			digit_str = path[i] + digit_str
+		else:
+			break
+	
+	# Если цифра найдена, возвращаем её как число
+	if digit_str != "":
+		return digit_str.to_int()
+	
+	# Если цифра не найдена, возвращаем -1 (или можно выбросить ошибку)
+	return -1
+
+

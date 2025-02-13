@@ -173,106 +173,106 @@ var wings_tier1_1 = {}
 var wings_tier2_1 = {}
 
 var grey = { #серый
-	"summable": [],
+	"summable": false,
 	"value": Color("7e7e8f"),
 	"spots": false
 }
 
 var light_grey = { #светло-серый
-	"summable": [],
+	"summable": false,
 	"value": Color.GRAY,
 	"spots": false
 }
 
 var black = { #черный
-	"summable": [],
+	"summable": false,
 	"value": Color.BLACK,
 	"spots": false 
 }
 
 var brown = { #коричневый
-	"summable": [],
+	"summable": false,
 	"value": Color.SADDLE_BROWN,
 	"spots": false
 }
 var semi_bald = { #полу лысый
-	"summable": [],
+	"summable": false,
 	"value": Color.PINK,
 	"spots": true, 
 	"value_s": Color("7e7e8f")
 }
 
 var white = { #белый
-	"summable": [],
+	"summable": false,
 	"value": Color.WHITE,
 	"spots": false
 }
 
 var blue = { #синий
-	"summable": [],
+	"summable": false,
 	"value": Color.BLUE,
 	"spots": false
 }
 
 var red = { #рыжий
-	"summable": [],
+	"summable": false,
 	"value": Color.ORANGE,
 	"spots": false
 }
 
 var bald = { #лысый
-	"summable": [],
+	"summable": false,
 	"value": Color.PINK,
 	"spots": false
 }
 
 var yellow = { #желтый
-	"summable": [],
+	"summable": false,
 	"value": Color.YELLOW,
 	"spots": false
 }
 
 var burgundy = { #красный
-	"summable": [],
+	"summable": false,
 	"value": Color.CRIMSON,
 	"spots": false
 }
 
 var black_w = { #черно-белый
-	"summable": [],
+	"summable": true,
 	"value": Color.BLACK,
 	"spots": true,
 	"value_s": Color.WHITE
 }
 
 var brown_w = { # коричнево-белый
-	"summable": [],
+	"summable": true,
 	"value": Color.SADDLE_BROWN,
 	"spots": true,
 	"value_s": Color.WHITE
 }
 
 var black_r = { #черно-рыжий
-	"summable": [],
+	"summable": true,
 	"value": Color.BLACK,
 	"spots": true,
 	"value_s": Color.ORANGE
 }
 
 var pink = { #розовый
-	"summable": [],
+	"summable": true,
 	"value": Color.HOT_PINK,
 	"spots": false
 }
 
 var green = { #зеленый
-	"summable": [],
+	"summable": true,
 	"value": Color.GREEN,
 	"spots": false
 }
 
 var violet = { #фиолетовый
-	"summable": [],
+	"summable": true,
 	"value": Color.VIOLET,
 	"spots": false
 }
@@ -306,19 +306,21 @@ func _ready():
 	
 	grey["neighb"] = [light_grey,black,brown,semi_bald]
 	light_grey["neighb"] = [white]
-	black["neighb"] = [blue]
-	brown["neighb"] = [red]
+	black["neighb"] = [blue,black_w,black_r]
+	brown["neighb"] = [red,brown_w]
 	semi_bald["neighb"] = [bald]
-	white["neighb"] = [yellow]	
-	red["neighb"] = [burgundy]
+	white["neighb"] = [yellow,black_w,brown_w,pink]	
+	red["neighb"] = [burgundy,black_r]
+	blue["neighb"] = [green, violet]
+	yellow["neighb"] = [green]
+	burgundy["neighb"] = [pink,violet]
 	
-	black["summable"] = [black_w, black_r]
-	brown["summable"] = [brown_w]
-	white["summable"] = [black_w, brown_w, pink]
-	red["summable"] = [black_r]
-	blue["summable"] = [green, violet]
-	yellow["summable"] = [green]	
-	burgundy["summable"] = [pink,violet]
+	black_w["summable"]
+	black_r["summable"]
+	brown_w["summable"]
+	pink["summable"]
+	green["summable"]
+	violet["summable"]
 	
 	food = 0
 	can_buy_rat = true

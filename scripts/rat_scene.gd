@@ -176,24 +176,35 @@ func gen_mixer(rat1 : Object, rat2 : Object):
 		if 	!randi_range(0,100) <= genes.mutation_chance:
 			genes.DNA[i] = choose_parent(rat1.genes.DNA[i],rat2.genes.DNA[i])
 			continue	
-		print("say something")	
 		genes.DNA[i] = genes.DNA[i]["neighb"][randi_range(0,genes.DNA[i]["neighb"].size()-1)]
-		print(genes.DNA[i])
-	if rat1.genes.color["summable"].size() != 0 and rat2.genes.color["summable"].size() != 0 and rat1.genes.color["summable"] != rat2.genes.color["summable"]:
-		for i in rat1.genes.color["summable"].size()-1:
-			if rat2.genes.color["summable"].find(rat1.genes.color["summable"][i]):
-				genes.color = rat1.genes.color["summable"][i]
-				print(genes.color["value"]," сложился")
+	if rat1.genes.color != rat2.genes.color :
+		for i in rat1.genes.color["neighb"].size()-1:
+			print(rat1.genes.color,"\n",rat2.genes.color)
+			if rat2.genes.color["neighb"].find(rat1.genes.color["neighb"][i]): #разобраться почему работает не правильно!!! 
+				genes.color = rat1.genes.color["neighb"][i]
+				print(genes.color," сложился")
 				return
-	elif randi_range(0,100) <= genes.mutation_chance:	
+	genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
+	print("работаем дальше")
+	if randi_range(0,100) <= genes.mutation_chance:	
 		genes.color = genes.color["neighb"][randi_range(0,genes.color["neighb"].size()-1)]
-		print(genes.color["value"]," мутировал")
+		print(genes.color," мутировал")
 		return
-	else:
-		genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
-		print(genes.color["value"]," передался")
-		return
-
+#	if rat1.genes.color != rat2.genes.color :
+#		for i in rat1.genes.color["neighb"].size()-1:
+#			if rat2.genes.color["neighb"].find(rat1.genes.color["neighb"][i]):
+##				genes.color = rat1.genes.color["neighb"][i]
+#				print(genes.color," сложился")
+##				return
+#	elif randi_range(0,100) <= genes.mutation_chance:	
+#		genes.color = genes.color["neighb"][randi_range(0,genes.color["neighb"].size()-1)]
+#		print(genes.color," мутировал")
+#		return
+#	else:
+#		genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
+#		print(genes.color," передался")
+#		return
+	
 	
 			
 func choose_parent(a,b):
@@ -240,7 +251,18 @@ func cost_calculation():
 			cost_array.append(-1)
 	cost = (100*(cost_array[0]+0.5)+100*(cost_array[1]+0.5)+100*(cost_array[2]+0.5)+100*(cost_array[3]+0.5)+100*(cost_array[4]+0.5)+100*(cost_array[5]+0.5)+
 +100*(cost_array[6]+0.5)+100*(cost_array[7]+0.5)+100*(cost_array[8]+0.5))
-	print(cost,"\n",cost_array)
+
+#func get_color_weight(color : Dictionary = {}):
+#	color = GlobalFuncNVar.black
+#	var array = GlobalFuncNVar.grey["neighb"]
+#	while  !array.is_empty():
+#		for i in array.size()-1:
+#			array.append()
+#			if array[i] == color:
+#				pass
+#			else:
+#				pass
+#		pass
 
 func get_digit_before_last_slash(path: String) -> int:
 	var last_slash_index = path.rfind("/")

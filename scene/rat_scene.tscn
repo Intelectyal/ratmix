@@ -203,7 +203,6 @@ libraries = {
 
 [node name="Breedable" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 3600.0
 one_shot = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

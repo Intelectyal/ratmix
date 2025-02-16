@@ -180,7 +180,7 @@ func gen_mixer(rat1 : Object, rat2 : Object):
 	if rat1.genes.color != rat2.genes.color :
 		for i in rat1.genes.color["neighb"].size()-1:
 			print(rat1.genes.color,"\n",rat2.genes.color)
-			if rat2.genes.color["neighb"].find(rat1.genes.color["neighb"][i]): #разобраться почему работает не правильно!!! 
+			if rat2.genes.color["neighb"].has(rat1.genes.color["neighb"][i]): #разобраться почему работает не правильно!!! 
 				genes.color = rat1.genes.color["neighb"][i]
 				print(genes.color," сложился")
 				return

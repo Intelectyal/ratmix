@@ -7,11 +7,13 @@ var mess_arr : Array
 
 
 func _ready():
+	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)
 	GlobalFuncNVar.screen_size = get_viewport_rect().size
 	GlobalFuncNVar.money = 20000
 	shelftile()
 	GlobalFuncNVar.shelf_buy.connect(shelftile)
 	%TileMap.set_layer_enabled(1,false)
+	GlobalFuncNVar.food_is_buy.connect(food_update)
 
 func _process(delta):
 	pass
@@ -22,11 +24,13 @@ func brush_cursor(vis):
 func shelftile():
 	%TileMap.set_layer_enabled(1,true)
 func rat_construct(): #Создает сцену с крысой и знаносит крысу в массив rats
-	GlobalFuncNVar.FoodTime -= 7.0
-	$HUD/FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
-	#print(GlobalFuncNVar.rats_arr.size())	
+	GlobalFuncNVar.FoodTime -= 7.0 
+	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)	
+	if GlobalFuncNVar.rats_arr.is_empty() and %Food_timer.is_paused():
+		%Food_timer.set_paused(false)
+	elif GlobalFuncNVar.rats_arr.is_empty():
+		%Food_timer.start()
 	GlobalFuncNVar.rats_arr.append(rat_scene.instantiate())
-	$HUD.rat_bar_update()
 	var rat = GlobalFuncNVar.rats_arr[GlobalFuncNVar.rats_arr.size()-1]
 	rat.rat_signal_left.connect(_on_rat_scene_rat_signal_left)
 	rat.rat_signal_right.connect(_on_rat_scene_rat_signal_right)
@@ -34,7 +38,12 @@ func rat_construct(): #Создает сцену с крысой и знанос
 	$Timer_mess.wait_time -= 0.5
 	return rat
 	
-
+func rat_is_sell():
+	GlobalFuncNVar.FoodTime += 7.0 #непонятки
+	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)	
+	if GlobalFuncNVar.rats_arr.is_empty():
+		%Food_timer.set_paused(true)
+		
 func _on_hud_make_child(parent0 : Object,parent1 : Object): #тестовая кнопка, создающая потомка крысы 1 и 2
 	if !parent0.breedable:
 		return
@@ -56,6 +65,7 @@ func _on_hud_spawnrat(cost): #СПАВНИТ КРЫСУ ПО НАЖАТИЮ КН
 	rat.forced_breath()
 	GlobalFuncNVar.money -= cost
 	add_child(rat)
+	
 
 
 
@@ -77,3 +87,25 @@ func _on_timer_mess():
 	mess.index = mess_arr.find(mess)
 	add_child(mess)
 	
+func food_update():
+	if GlobalFuncNVar.food == 0:
+		%Food_timer.start()
+	GlobalFuncNVar.food = 5
+	GlobalFuncNVar.food_timer.emit(GlobalFuncNVar.food)
+
+func _on_food_timer_timeout():
+	if GlobalFuncNVar.food > 0 and !GlobalFuncNVar.rats_arr.is_empty():
+		GlobalFuncNVar.food -= 1
+	if GlobalFuncNVar.food == 0 and !GlobalFuncNVar.rats_arr.is_empty():
+		GlobalFuncNVar.my_notification.emit("У крыс закончился корм\n Срочно купите еды")
+		%Food_timer.stop()
+		#здесь должен стартовать новый таймер для gameover
+	GlobalFuncNVar.food_timer.emit(GlobalFuncNVar.food)
+
+func timer_food_start():
+	if %Food_timer.time_left == 0.0:
+		%Food_timer.start()
+	pass
+
+func new_gene_notification():
+	pass

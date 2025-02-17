@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://c14nsvjbyqvq0"]
+[gd_scene load_steps=43 format=3 uid="uid://c14nsvjbyqvq0"]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_scixf"]
 [ext_resource type="Texture2D" uid="uid://u4dm2g5ws8hl" path="res://art/hud/ratbar.png" id="2_4lrh4"]
@@ -34,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://c0lqlbxk1st1k" path="res://art/hud/TubeB.png" id="27_t7ksl"]
 [ext_resource type="Texture2D" uid="uid://yiiorcff55b0" path="res://art/hud/Bowl.png" id="28_tbi23"]
 [ext_resource type="Texture2D" uid="uid://dol1v3c8ete2y" path="res://art/hud/Bowlb.png" id="29_emr7d"]
+[ext_resource type="Texture2D" uid="uid://cyf2vr12dugoi" path="res://art/object/rectangle.png" id="35_od06n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i67yt"]
 bg_color = Color(0.603922, 0.301961, 0.670588, 1)
@@ -794,10 +795,53 @@ offset_bottom = 127.0
 scale = Vector2(0.037, 1.1)
 color = Color(0.294118, 0.356863, 0.670588, 1)
 
-[node name="FoodTimer" type="Timer" parent="."]
+[node name="NotificationLayer" type="CenterContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Notification" type="VBoxContainer" parent="Control/MarginContainer/NotificationLayer"]
 unique_name_in_owner = true
-wait_time = 15.0
-autostart = true
+visible = false
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/NotificationLayer/Notification"]
+layout_mode = 2
+texture = ExtResource("35_od06n")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/NotificationLayer/Notification/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Nlabel" type="Label" parent="Control/MarginContainer/NotificationLayer/Notification/TextureRect/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 2
+visible_characters_behavior = 3
+
+[node name="OKbutton" type="Button" parent="Control/MarginContainer/NotificationLayer/Notification"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "OK"
+icon = ExtResource("8_qk1we")
+flat = true
+icon_alignment = 1
+expand_icon = true
 
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer2/Mix" to="." method="_on_mix_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer2/Shop" to="." method="_on_shop_pressed"]
@@ -824,4 +868,4 @@ autostart = true
 [connection signal="item_selected" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB1" to="." method="_on_ob_1_item_selected"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Make child" to="." method="_on_make_child_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Exit" to="." method="mix_closed_pressed"]
-[connection signal="timeout" from="FoodTimer" to="." method="_on_food_timer_timeout"]
+[connection signal="pressed" from="Control/MarginContainer/NotificationLayer/Notification/OKbutton" to="." method="_notification_close"]

@@ -135,6 +135,11 @@ autostart = true
 
 [node name="Object" parent="." instance=ExtResource("5_ycli1")]
 
+[node name="Food_timer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 10.0
+
 [connection signal="make_child" from="HUD" to="." method="_on_hud_make_child"]
 [connection signal="spawnrat" from="HUD" to="." method="_on_hud_spawnrat"]
 [connection signal="timeout" from="Timer_mess" to="." method="_on_timer_mess"]
+[connection signal="timeout" from="Food_timer" to="." method="_on_food_timer_timeout"]

@@ -10,18 +10,20 @@ var rlabel_timer = Timer.new()
 var rat_line = LineEdit.new()
 var bgroup1
 var list_names : Array 
+var notif_array : Array[String] = []
 
 func _ready():
-	%FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
-	food_bar_update()
+	food_bar_update(0) #обнуляет food bar полностью
+	GlobalFuncNVar.food_timer.connect(food_bar_update)
 	rat_bar_update()
 	add_child(rat_label)
 	add_child(rlabel_timer)
 	rlabel_timer.timeout.connect(rlabel_timer_timeout)
 	bgroup1 = %Food.get_button_group()
-	if %Food.get_meta("Dict")["flag"] == false:
+	if %Food.get_meta("Dict")["flag"] == false: #понять зачем я ее сделал
 		%BrushB.icon = load("res://art/object2/brushbd.png")
 	%Food.disabled = true
+	GlobalFuncNVar.my_notification.connect(queue_notification)
 	
 func preview_string(text : String):
 	text = text.insert(13,"_preview")
@@ -49,10 +51,9 @@ func _process(delta):
 	pass
 	
 func money_update():
-	%Money0.text = "MONEY: " + str(GlobalFuncNVar.money)
-	%Money1.text = "MONEY: " + str(GlobalFuncNVar.money)
-	%Money2.text = "MONEY: " + str(GlobalFuncNVar.money)
-	pass 
+	%Money0.set_text("MONEY: " + str(GlobalFuncNVar.money))
+	%Money1.set_text("MONEY: " + str(GlobalFuncNVar.money))
+	%Money2.set_text("MONEY: " + str(GlobalFuncNVar.money))
 	
 func rat_info(rat_name,x,y):
 	rat_line.visible = false
@@ -65,7 +66,7 @@ func rat_info(rat_name,x,y):
 func rlabel_timer_timeout():
 	rat_label.visible = false
 	
-func rat_rename(x,y):
+func rat_rename(x,y): #ПЕРЕДЕЛАТЬ
 	rat_label.visible = false
 	rat_line.visible = true
 	var new_name = "ЗАГЛУШКА"
@@ -96,7 +97,7 @@ func _on_mix_pressed():
 	%Panel.visible = true
 	option_buttons_update()
 
-func option_buttons_update():
+func option_buttons_update(): #обновляет списки в окне скрещивания
 	%OB0.clear()
 	%OB1.clear()
 	for i in GlobalFuncNVar.rats_arr:
@@ -131,8 +132,7 @@ func show_cost_items():
 func items_update(item_name, flag):
 	match item_name:
 		"Food":
-			GlobalFuncNVar.food = 5		
-			food_bar_update()
+			GlobalFuncNVar.food_is_buy.emit()
 		"Shelf":
 				GlobalFuncNVar.shelf_buy.emit()
 				GlobalFuncNVar.shelf_is_buy = true
@@ -160,6 +160,7 @@ func _on_make_child_pressed():
 		return
 	make_child.emit(GlobalFuncNVar.rats_arr[%OB0.get_selected_id()],GlobalFuncNVar.rats_arr[%OB1.get_selected_id()])
 	option_buttons_update()
+	_list_sell_update()
 
 func rat_bar_update():	
 	if GlobalFuncNVar.rats_arr.size() <= 8:
@@ -169,34 +170,27 @@ func rat_bar_update():
 		%ratrect1.scale.x = -8.038 + float(GlobalFuncNVar.rats_arr.size())
 	
 
-func food_bar_update():
-	%foodrect.scale.x = GlobalFuncNVar.food
-	GlobalFuncNVar.food_in_bowl.emit(GlobalFuncNVar.food)
+func food_bar_update(food : int):
+	%foodrect.scale.x = food
+	GlobalFuncNVar.food_in_bowl.emit(food)
+	%Food.get_meta("Dict")["flag"] = false
 
-func _on_food_timer_timeout():
-	if GlobalFuncNVar.food > 0 and !GlobalFuncNVar.rats_arr.is_empty():
-		GlobalFuncNVar.food -= 1
-		food_bar_update()
-		%Food.get_meta("Dict")["flag"] = false
 
-func _on_shop_tab_changed(tab):
+func _on_shop_tab_changed(tab): #обработчик изменения вкладок магазина
 	if %Shop.current_tab == 2:
 		GlobalFuncNVar.rats_cost.emit()
 		pass
+	_list_sell_update()
+	
+func _list_sell_update(): #обновляет список мышей на продажу
 	%OB3.clear()
 	for i in GlobalFuncNVar.rats_arr:
 		%OB3.add_item(i.rat_name)
 
-func _on_sell_pressed():
+func _on_sell_pressed(): #функция продажи
 	var id = %OB3.get_selected_id()
 	if id == -1:
 		return
-#	if GlobalFuncNVar.rats_arr[id].genes.DNA == [GlobalFuncNVar.body_base,GlobalFuncNVar.ears_base,GlobalFuncNVar.eyes_base,GlobalFuncNVar.legs_base
-#,GlobalFuncNVar.nose_base,GlobalFuncNVar.tail_base] and GlobalFuncNVar.rats_arr[id].genes.color == GlobalFuncNVar.grey and GlobalFuncNVar.rats_arr[id].genes.global_genes == {
-#	"fluffy":false, "size":0.5} :
-#		GlobalFuncNVar.money += 900
-#	else:
-#		GlobalFuncNVar.money += 1200
 	GlobalFuncNVar.money += GlobalFuncNVar.rats_arr[id].cost
 	money_update()
 	GlobalFuncNVar.FoodTime += 7.0
@@ -205,6 +199,7 @@ func _on_sell_pressed():
 	GlobalFuncNVar.rats_arr.remove_at(id)
 	rat_bar_update()
 	_on_shop_tab_changed(%OB3.get_selected())
+	option_buttons_update()
 
 
 
@@ -214,3 +209,21 @@ func _on_ob_0_item_selected(index):
 
 func _on_ob_1_item_selected(index):
 	preview(%OB1.get_selected_id(),1)
+
+
+func _notification_close():#Закрывает уведомление
+	%Notification.visible = false
+	queue_notification() #проверяет нет ли еще уведомлений
+func show_my_notification(text : String): #показывает уведомление
+	%Notification.visible = true
+	%Nlabel.set_text(text)
+	
+func queue_notification(text : String = ""): #очередь уведомлений
+	if !text.is_empty():
+		notif_array.append(text)
+	if notif_array.is_empty():
+		return -1
+	if %Notification.visible == false:
+		show_my_notification(notif_array.front())
+		notif_array.pop_front()
+	

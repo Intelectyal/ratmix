@@ -130,8 +130,8 @@ func _on_character_body_2d_input_event(viewport, event, shape_idx):
 		
 
 func name_generator():#генератор имён
-	rat_name += GlobalFuncNVar.FirstName[randi_range(0,GlobalFuncNVar.FirstName.size()-1)]
-	rat_name += GlobalFuncNVar.SecondName[randi_range(0,GlobalFuncNVar.SecondName.size()-1)]
+	rat_name += GlobalFuncNVar.FirstName.pick_random()
+	rat_name += GlobalFuncNVar.SecondName.pick_random()
 
 func randomspawn():#дает крысе случайные координаты
 	position.x = randi_range(500*0.5,600*0.5)
@@ -140,7 +140,7 @@ func randomspawn():#дает крысе случайные координаты
 
 func rat_generate():# генерирует крысы (Кажется нужно переделать 	
 	new_rat()
-	$spots.visible = false
+#	$spots.visible = false
 	
 
 func new_rat():
@@ -159,6 +159,9 @@ func new_rat():
 	$tail_f.texture = ResourceLoader.load(genes.DNA[5]["fur"])
 	$tail_s.texture = ResourceLoader.load(genes.DNA[5]["skin"])
 	$tail_f.modulate = genes.color["value"]	
+	if genes.color["spots"] == true:
+		$spots.texture = ResourceLoader.load("res://art//rat//over//tier1//1.png")
+		$spots.modulate = genes.color["value_s"]
 #	$horns.texture = ResourceLoader.load()
 #	$mouth.texture = ResourceLoader.load()
 #	$wings.texture = ResourceLoader.load()
@@ -170,41 +173,30 @@ func gen_mixer(rat1 : Object, rat2 : Object):
 		genes.global_genes["fluffy"] = true
 	if genes.global_genes["fluffy"] == true:
 		genes.DNA[0] = GlobalFuncNVar.body_fluffy
-	for i in (genes.DNA.size()-1):
+	for i in (genes.DNA.size()):
 		if i == 0:
 			continue
 		if 	!randi_range(0,100) <= genes.mutation_chance:
 			genes.DNA[i] = choose_parent(rat1.genes.DNA[i],rat2.genes.DNA[i])
 			continue	
-		genes.DNA[i] = genes.DNA[i]["neighb"][randi_range(0,genes.DNA[i]["neighb"].size()-1)]
+		genes.DNA[i] = genes.DNA[i]["neighb"].pick_random()
 	if rat1.genes.color != rat2.genes.color :
-		for i in rat1.genes.color["neighb"].size()-1:
-			print(rat1.genes.color,"\n",rat2.genes.color)
-			if rat2.genes.color["neighb"].has(rat1.genes.color["neighb"][i]): #разобраться почему работает не правильно!!! 
+		for i in rat1.genes.color["neighb"].size():
+			if rat2.genes.color["neighb"].has(rat1.genes.color["neighb"][i]): 
 				genes.color = rat1.genes.color["neighb"][i]
-				print(genes.color," сложился")
+				print("сложился")
 				return
 	genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
-	print("работаем дальше")
 	if randi_range(0,100) <= genes.mutation_chance:	
-		genes.color = genes.color["neighb"][randi_range(0,genes.color["neighb"].size()-1)]
-		print(genes.color," мутировал")
+		print("мутация")
+		var colors : Array = []
+		for i in genes.color["neighb"]:
+			if i["summable"] == false:
+				colors.append(i)
+		if !colors.is_empty():	
+			genes.color = colors.pick_random()
 		return
-#	if rat1.genes.color != rat2.genes.color :
-#		for i in rat1.genes.color["neighb"].size()-1:
-#			if rat2.genes.color["neighb"].find(rat1.genes.color["neighb"][i]):
-##				genes.color = rat1.genes.color["neighb"][i]
-#				print(genes.color," сложился")
-##				return
-#	elif randi_range(0,100) <= genes.mutation_chance:	
-#		genes.color = genes.color["neighb"][randi_range(0,genes.color["neighb"].size()-1)]
-#		print(genes.color," мутировал")
-#		return
-#	else:
-#		genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
-#		print(genes.color," передался")
-#		return
-	
+
 	
 			
 func choose_parent(a,b):
@@ -241,7 +233,6 @@ func cost_calculation():
 	var cost_array : Array
 	if cost != 0:
 		return
-	print(genes.DNA.size())
 	for i in genes.DNA.size():
 		if genes.DNA[i].get("skin") != null:
 			cost_array.append(get_digit_before_last_slash(genes.DNA[i].get("skin")))
@@ -249,20 +240,43 @@ func cost_calculation():
 			cost_array.append(get_digit_before_last_slash(genes.DNA[i].get("fur")))
 		elif (genes.DNA[i].get("fur") == null and genes.DNA[i].get("skin") == null):
 			cost_array.append(-1)
-	cost = (100*(cost_array[0]+0.5)+100*(cost_array[1]+0.5)+100*(cost_array[2]+0.5)+100*(cost_array[3]+0.5)+100*(cost_array[4]+0.5)+100*(cost_array[5]+0.5)+
-+100*(cost_array[6]+0.5)+100*(cost_array[7]+0.5)+100*(cost_array[8]+0.5))
+	cost = 100 * (
+	cost_array[0] + 0.7 +  # тело
+	cost_array[1] + 0.5 +  # уши
+	cost_array[2] + 0.5 +  # глаза
+	cost_array[3] + 0.7 +  # ноги
+	cost_array[4] + 0.5 +  #нос
+	cost_array[5] + 0.5 +  # хвост
+	cost_array[6] + 0.5 +  # рога
+	cost_array[7] + 0.5 +  # крылья
+	cost_array[8] + 0.5   # рот
+)
+	cost += calculate_color_bonus_cost(genes.color)*80
+	print(cost,"|||", calculate_color_bonus_cost(genes.color)*80 )
+	
 
-#func get_color_weight(color : Dictionary = {}):
-#	color = GlobalFuncNVar.black
-#	var array = GlobalFuncNVar.grey["neighb"]
-#	while  !array.is_empty():
-#		for i in array.size()-1:
-#			array.append()
-#			if array[i] == color:
-#				pass
-#			else:
-#				pass
-#		pass
+func calculate_color_bonus_cost(color : Dictionary = {}) -> int:
+	var array : Array[Dictionary] = []
+	var is_check : Array[Dictionary] = []
+	var total_found : int = 0
+	var dist_index : int = 0
+	array.append_array(GlobalFuncNVar.grey["neighb"])
+	for i in array:
+		i["distance"] = 1
+	while !array.is_empty():
+		if !is_check.has(array.front()):
+			if array.front() == color:
+				total_found += 1
+				dist_index = array.front()["distance"]
+			for i in array.front()["neighb"]:
+				i["distance"] = 1+array.front()["distance"]
+			is_check.append(array.front())
+			array.append_array(array.front()["neighb"])
+		array.pop_front()
+		is_check.erase(color)
+	if total_found == 0:
+		return 1
+	return total_found*dist_index+1
 
 func get_digit_before_last_slash(path: String) -> int:
 	var last_slash_index = path.rfind("/")

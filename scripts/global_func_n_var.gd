@@ -13,9 +13,13 @@ signal obj_start_animation(name : String)
 signal obj_stop_animation(name : String)
 signal tramp_frame(frame : int)
 signal food_in_bowl(state : bool)
+signal my_notification(text : String)
+signal food_timer(food : int) #MAIN -> HUD
+signal food_is_buy() #HUD -> MAIN
+signal rat_sell() # HUD -> MAIN 
 
 
-var FoodTime : float = 187.0
+var FoodTime : float = 10.0
 var rats_arr : Array
 var screen_size 
 var rat_on_path : bool
@@ -30,7 +34,8 @@ var can_buy_rat : bool
 var shelf_is_buy : bool
 var objs_list = {"Wheel":false,"Bush":false,"Tramp":false,"Tube":false,"House":false}
 var objs_coord = {"Wheel":Vector2(1728,904),"Bush":Vector2(328,936),"Tramp":Vector2(176,728),"Tube":Vector2(1536,648),"House":Vector2(1784,584)}
-var GuiFlag : bool = false
+var GuiFlag : bool = true
+
 
 var ears_base = {
 	"fur" : "res://art/rat/ears/tier0/0fur.png",
@@ -175,106 +180,123 @@ var wings_tier2_1 = {}
 var grey = { #серый
 	"summable": false,
 	"value": Color("7e7e8f"),
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var light_grey = { #светло-серый
 	"summable": false,
 	"value": Color.GRAY,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var black = { #черный
 	"summable": false,
 	"value": Color.BLACK,
-	"spots": false 
+	"spots": false ,
+	"neighb" : []
 }
 
 var brown = { #коричневый
 	"summable": false,
 	"value": Color.SADDLE_BROWN,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 var semi_bald = { #полу лысый
 	"summable": false,
 	"value": Color.PINK,
 	"spots": true, 
-	"value_s": Color("7e7e8f")
+	"value_s": Color("7e7e8f"),
+	"neighb" : []
 }
 
 var white = { #белый
 	"summable": false,
 	"value": Color.WHITE,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var blue = { #синий
 	"summable": false,
 	"value": Color.BLUE,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var red = { #рыжий
 	"summable": false,
 	"value": Color.ORANGE,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var bald = { #лысый
 	"summable": false,
 	"value": Color.PINK,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var yellow = { #желтый
 	"summable": false,
 	"value": Color.YELLOW,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var burgundy = { #красный
 	"summable": false,
 	"value": Color.CRIMSON,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var black_w = { #черно-белый
 	"summable": true,
 	"value": Color.BLACK,
 	"spots": true,
-	"value_s": Color.WHITE
+	"value_s": Color.WHITE,
+	"neighb" : []
 }
 
 var brown_w = { # коричнево-белый
 	"summable": true,
 	"value": Color.SADDLE_BROWN,
 	"spots": true,
-	"value_s": Color.WHITE
+	"value_s": Color.WHITE,
+	"neighb" : []
 }
 
 var black_r = { #черно-рыжий
 	"summable": true,
 	"value": Color.BLACK,
 	"spots": true,
-	"value_s": Color.ORANGE
+	"value_s": Color.ORANGE,
+	"neighb" : []
 }
 
 var pink = { #розовый
 	"summable": true,
 	"value": Color.HOT_PINK,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var green = { #зеленый
 	"summable": true,
 	"value": Color.GREEN,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 var violet = { #фиолетовый
 	"summable": true,
 	"value": Color.VIOLET,
-	"spots": false
+	"spots": false,
+	"neighb" : []
 }
 
 func _ready():
@@ -315,12 +337,12 @@ func _ready():
 	yellow["neighb"] = [green]
 	burgundy["neighb"] = [pink,violet]
 	
-	black_w["summable"]
-	black_r["summable"]
-	brown_w["summable"]
-	pink["summable"]
-	green["summable"]
-	violet["summable"]
+	black_w["neighb"] = []
+	black_r["neighb"]= []
+	brown_w["neighb"]= []
+	pink["neighb"]= []
+	green["neighb"]= []
+	violet["neighb"]= []
 	
 	food = 0
 	can_buy_rat = true

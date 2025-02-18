@@ -24,6 +24,7 @@ func _ready():
 		%BrushB.icon = load("res://art/object2/brushbd.png")
 	%Food.disabled = true
 	GlobalFuncNVar.my_notification.connect(queue_notification)
+
 	
 func preview_string(text : String):
 	text = text.insert(13,"_preview")
@@ -91,11 +92,14 @@ func _on_brush_pressed():
 
 func _on_shop_pressed():
 	%Shop.visible = true
+	Hudflag()
 	money_update()
 
 func _on_mix_pressed():
 	%Panel.visible = true
+	Hudflag()
 	option_buttons_update()
+	
 
 func option_buttons_update(): #обновляет списки в окне скрещивания
 	%OB0.clear()
@@ -106,9 +110,11 @@ func option_buttons_update(): #обновляет списки в окне ск�
 
 func store_closed_pressed():
 	%Shop.visible = false
+	Hudflag()
 
 func mix_closed_pressed():
 	%Panel.visible = false
+	Hudflag()
 
 func buy_rat():
 	if int(%CostRat.text) <= GlobalFuncNVar.money:
@@ -116,6 +122,8 @@ func buy_rat():
 			return
 		spawnrat.emit(int(%CostRat.text))
 		money_update()
+		rat_bar_update()
+		
 
 func buy_item():
 	if  !is_instance_valid(bgroup1.get_pressed_button()):
@@ -162,7 +170,7 @@ func _on_make_child_pressed():
 	option_buttons_update()
 	_list_sell_update()
 
-func rat_bar_update():	
+func rat_bar_update():	#обновляет шкалу количества крыс
 	if GlobalFuncNVar.rats_arr.size() <= 8:
 		%ratrect0.scale.x = 0.037 + float(GlobalFuncNVar.rats_arr.size())
 		%ratrect1.scale.x = 0.0
@@ -175,12 +183,12 @@ func food_bar_update(food : int):
 	GlobalFuncNVar.food_in_bowl.emit(food)
 	%Food.get_meta("Dict")["flag"] = false
 
-
 func _on_shop_tab_changed(tab): #обработчик изменения вкладок магазина
 	if %Shop.current_tab == 2:
 		GlobalFuncNVar.rats_cost.emit()
-		pass
 	_list_sell_update()
+
+	
 	
 func _list_sell_update(): #обновляет список мышей на продажу
 	%OB3.clear()
@@ -191,16 +199,12 @@ func _on_sell_pressed(): #функция продажи
 	var id = %OB3.get_selected_id()
 	if id == -1:
 		return
-	GlobalFuncNVar.money += GlobalFuncNVar.rats_arr[id].cost
+	GlobalFuncNVar.rat_sell.emit(id)
 	money_update()
-	GlobalFuncNVar.FoodTime += 7.0
-	%FoodTimer.set_wait_time(GlobalFuncNVar.FoodTime)
-	GlobalFuncNVar.rats_arr[id].queue_free() 
-	GlobalFuncNVar.rats_arr.remove_at(id)
 	rat_bar_update()
-	_on_shop_tab_changed(%OB3.get_selected())
+	_list_sell_update()
 	option_buttons_update()
-
+	
 
 
 func _on_ob_0_item_selected(index):
@@ -226,4 +230,8 @@ func queue_notification(text : String = ""): #очередь уведомлен�
 	if %Notification.visible == false:
 		show_my_notification(notif_array.front())
 		notif_array.pop_front()
-	
+func Hudflag():
+	if %Shop.is_visible() or %Panel.is_visible():
+		GlobalFuncNVar.HudFlag = true
+	if !%Shop.is_visible() and !%Panel.is_visible():
+		GlobalFuncNVar.HudFlag = false

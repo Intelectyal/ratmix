@@ -180,6 +180,7 @@ alignment = 1
 
 [node name="Shop" type="TabContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(768, 768)
 layout_mode = 2
 theme = ExtResource("3_epkro")

@@ -18,11 +18,19 @@ var obj_anim_flag : bool = false
 var breedable : bool = true
 var cost : int = 0
 
+var damage: int:
+	get:
+		return damage * 10
+
 func _ready():
 	name_generator()
 	randomspawn()
 	rat_generate()
 	GlobalFuncNVar.rats_cost.connect(cost_calculation)
+	damage = 1 
+	print(damage)
+	
+	
 
 func anim_flag_change():
 	obj_anim_flag = !obj_anim_flag
@@ -67,7 +75,7 @@ func _on_timer_timeout():
 	pass
 
 func _input(event):
-	if GlobalFuncNVar.GuiFlag:
+	if GlobalFuncNVar.HudFlag:
 		return
 	if event.is_action_pressed("mouse_left") and event.double_click and number_of_pos == -1 and run_state != 2:
 		target = get_global_mouse_position()
@@ -168,10 +176,10 @@ func new_rat():
 	
 	
 func gen_mixer(rat1 : Object, rat2 : Object):
-	genes.global_genes["fluffy"] = choose_parent(rat1.genes.global_genes["fluffy"],rat2.genes.global_genes["fluffy"])
+	genes.set_fluffy(choose_parent(rat1.genes.get_fluffy(),rat2.genes.get_fluffy()))
 	if randi_range(0,100) <= genes.mutation_chance:
-		genes.global_genes["fluffy"] = true
-	if genes.global_genes["fluffy"] == true:
+		genes.set_fluffy(true)
+	if genes.get_fluffy() == true:
 		genes.DNA[0] = GlobalFuncNVar.body_fluffy
 	for i in (genes.DNA.size()):
 		if i == 0:

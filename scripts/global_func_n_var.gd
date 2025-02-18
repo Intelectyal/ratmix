@@ -16,9 +16,10 @@ signal food_in_bowl(state : bool)
 signal my_notification(text : String)
 signal food_timer(food : int) #MAIN -> HUD
 signal food_is_buy() #HUD -> MAIN
-signal rat_sell() # HUD -> MAIN 
+signal rat_sell(id : int) # HUD -> MAIN 
 
 
+var discovered_genes : Array = []
 var FoodTime : float = 10.0
 var rats_arr : Array
 var screen_size 
@@ -34,7 +35,7 @@ var can_buy_rat : bool
 var shelf_is_buy : bool
 var objs_list = {"Wheel":false,"Bush":false,"Tramp":false,"Tube":false,"House":false}
 var objs_coord = {"Wheel":Vector2(1728,904),"Bush":Vector2(328,936),"Tramp":Vector2(176,728),"Tube":Vector2(1536,648),"House":Vector2(1784,584)}
-var GuiFlag : bool = true
+var HudFlag : bool = true #нужен для отключения взаимодействия с крысами, когда пользователь взаимодействует с элементами HUD
 
 
 var ears_base = {
@@ -118,9 +119,9 @@ var nose_tier2_1 = {
 	"fur" :  "res://art/rat/noses/tier2/1fur.png",
 	"skin" : "res://art/rat/noses/tier2/1skin.png"
 }
-var nose_tier1_2 = { #Эксперементы если дать неправильную ссылку на ресурс
+var nose_tier1_2 = { 	
 	"fur" :  "",
-	"skin" : "res://art/rat/noses/tier2/1.png"
+	"skin" : "res://art/rat/noses/tier2/2skin.png"
 }
 
 var tail_base = {
@@ -145,7 +146,7 @@ var tail_tier2_1 = {
 }
 var tail_tier2_2 = {
 	"fur" : "",
-	"skin" : ""
+	"skin" : "res://art/rat/tails/tier2/null"
 }
 var body_base = {
 	"fur" : "res://art/rat/bodys/tier0/0.png"
@@ -169,13 +170,41 @@ var wings_base = {
 	"fur" : "res://art/rat/wings/tier0/null",
 	"skin" : "res://art/rat/wings/tier0/null"
 }
-var mouth_tier1_1 = {}
-var mouth_tier2_1= {}
-var horns_tier1_1= {}
-var horns_tier2_1= {}
-var horns_tier2_2= {}
-var wings_tier1_1 = {}
-var wings_tier2_1 = {}
+var mouth_tier1_1 = {
+	"fur" : "res://art/rat/mouth/tier1/null",
+	"skin" : "res://art/rat/mouth/tier1/0.png"
+}
+var mouth_tier2_1= {
+	"fur" : "res://art/rat/mouth/tier2/null",
+	"skin" : "res://art/rat/mouth/tier2/0.png"
+}
+var horns_tier1_1= {
+	"fur" : "res://art/rat/horns/tier1/null",
+	"skin" : "res://art/rat/horns/tier1/1.png"
+}
+var horns_tier2_1= {
+	"fur" : "res://art/rat/horns/tier2/null",
+	"skin" : "res://art/rat/horns/tier2/1.png"
+}
+var horns_tier2_2= {
+	"fur" : "res://art/rat/horns/tier2/null",
+	"skin" : "res://art/rat/horns/tier2/2.png"
+}
+var wings_tier1_1 = {
+	"fur" : "res://art/rat/wings/tier1/null",
+	"skin" : "res://art/rat/wings/tier1/1.png"
+}
+var wings_tier2_1 = {
+	"fur" : "res://art/rat/wings/tier2/null",
+	"skin" : "res://art/rat/wings/tier2/1.png"
+}
+#var mouth_tier1_1 = {}
+#var mouth_tier2_1= {}
+#var horns_tier1_1= {}
+#var horns_tier2_1= {}
+#var horns_tier2_2= {}
+#var wings_tier1_1 = {}
+#var wings_tier2_1 = {}
 
 var grey = { #серый
 	"summable": false,
@@ -363,7 +392,7 @@ func get_txt(mystr : String, arr : Array):
 	var i = 0 
 	var n = 0
 	while i < (mystr.length()-6):
-		while mystr[i] != "\r": #ХЗ почему но на рабочем компе пкрашится. i = 282 и выходит за массив, если не исправить на "\n" 
+		while mystr[i] != "\n": #ХЗ почему но на рабочем компе пкрашится. i = 282 и выходит за массив, если не исправить на "\n" 
 			arr[n] += mystr[i]
 			i += 1
 		n += 1

@@ -6,6 +6,7 @@ var rat_scene = preload("res://scene/rat_scene.tscn")
 var mess_arr : Array
 
 
+
 func _ready():
 	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)
 	GlobalFuncNVar.screen_size = get_viewport_rect().size
@@ -14,6 +15,9 @@ func _ready():
 	GlobalFuncNVar.shelf_buy.connect(shelftile)
 	%TileMap.set_layer_enabled(1,false)
 	GlobalFuncNVar.food_is_buy.connect(food_update)
+	GlobalFuncNVar.rat_sell.connect(rat_is_sell)
+	GlobalFuncNVar.discovered_genes.append_array(base_genes_array())
+	print(GlobalFuncNVar.discovered_genes.size())
 
 func _process(delta):
 	pass
@@ -31,16 +35,19 @@ func rat_construct(): #Создает сцену с крысой и знанос
 	elif GlobalFuncNVar.rats_arr.is_empty():
 		%Food_timer.start()
 	GlobalFuncNVar.rats_arr.append(rat_scene.instantiate())
-	var rat = GlobalFuncNVar.rats_arr[GlobalFuncNVar.rats_arr.size()-1]
+	var rat = GlobalFuncNVar.rats_arr.back()
 	rat.rat_signal_left.connect(_on_rat_scene_rat_signal_left)
 	rat.rat_signal_right.connect(_on_rat_scene_rat_signal_right)
 	rat.rat_index = GlobalFuncNVar.rats_arr.find(rat)
 	$Timer_mess.wait_time -= 0.5
 	return rat
 	
-func rat_is_sell():
-	GlobalFuncNVar.FoodTime += 7.0 #непонятки
-	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)	
+func rat_is_sell(id : int):
+	GlobalFuncNVar.money += GlobalFuncNVar.rats_arr[id].cost
+	GlobalFuncNVar.FoodTime += 7.0
+	%Food_timer.set_wait_time(GlobalFuncNVar.FoodTime)
+	GlobalFuncNVar.rats_arr[id].queue_free() 
+	GlobalFuncNVar.rats_arr.remove_at(id)
 	if GlobalFuncNVar.rats_arr.is_empty():
 		%Food_timer.set_paused(true)
 		
@@ -67,7 +74,11 @@ func _on_hud_spawnrat(cost): #СПАВНИТ КРЫСУ ПО НАЖАТИЮ КН
 	add_child(rat)
 	
 
-
+func base_genes_array()-> Array:
+	var alpa_rat = rat_scene.instantiate()
+	var array = alpa_rat.genes.return_genes_array()
+	alpa_rat.queue_free()
+	return alpa_rat.genes.return_genes_array()
 
 func _on_rat_scene_rat_signal_left(rat_index):
 	var rat = GlobalFuncNVar.rats_arr[rat_index]
@@ -105,7 +116,8 @@ func _on_food_timer_timeout():
 func timer_food_start():
 	if %Food_timer.time_left == 0.0:
 		%Food_timer.start()
-	pass
+	
 
-func new_gene_notification():
+func new_gene_notification(verifiable_array : Array = [])-> void:
+	return
 	pass

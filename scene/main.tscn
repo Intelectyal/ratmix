@@ -128,7 +128,7 @@ layer_1/z_index = 0
 layer_1/tile_data = PackedInt32Array(196611, 131074, 1, 196619, 131074, 1, 131072, 2, 1, 131085, 65538, 1, 131084, 65538, 1, 131083, 65538, 1, 131082, 65538, 1, 131081, 65538, 1, 131080, 65538, 1, 131079, 65538, 1, 131078, 65538, 1, 131077, 65538, 1, 131076, 65538, 1, 131075, 65538, 1, 131074, 65538, 1, 131073, 65538, 1, 131086, 131074, 1)
 
 [node name="Timer_mess" type="Timer" parent="."]
-wait_time = 50.0
+wait_time = 20.0
 autostart = true
 
 [node name="brush_cursor" type="Sprite2D" parent="."]
@@ -139,7 +139,13 @@ autostart = true
 unique_name_in_owner = true
 wait_time = 10.0
 
+[node name="Happy_timer" type="Timer" parent="."]
+wait_time = 60.0
+autostart = true
+
 [connection signal="make_child" from="HUD" to="." method="_on_hud_make_child"]
 [connection signal="spawnrat" from="HUD" to="." method="_on_hud_spawnrat"]
 [connection signal="timeout" from="Timer_mess" to="." method="_on_timer_mess"]
 [connection signal="timeout" from="Food_timer" to="." method="_on_food_timer_timeout"]
+[connection signal="timeout" from="Happy_timer" to="." method="rats_happiness"]
+[connection signal="timeout" from="Happy_timer" to="." method="_on_happy_timer_timeout"]

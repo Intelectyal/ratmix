@@ -17,10 +17,13 @@ signal my_notification(text : String)
 signal food_timer(food : int) #MAIN -> HUD
 signal food_is_buy() #HUD -> MAIN
 signal rat_sell(id : int) # HUD -> MAIN 
+signal happiness_sig(happy : int) # MAIN -> HUD
+signal calculate_happiness # HUD -> MAIN
+signal delet_mess(object)
 
 
 var discovered_genes : Array = []
-var FoodTime : float = 10.0
+var FoodTime : float = 120.0
 var rats_arr : Array
 var screen_size 
 var rat_on_path : bool
@@ -36,6 +39,7 @@ var shelf_is_buy : bool
 var objs_list = {"Wheel":false,"Bush":false,"Tramp":false,"Tube":false,"House":false}
 var objs_coord = {"Wheel":Vector2(1728,904),"Bush":Vector2(328,936),"Tramp":Vector2(176,728),"Tube":Vector2(1536,648),"House":Vector2(1784,584)}
 var HudFlag : bool = true #нужен для отключения взаимодействия с крысами, когда пользователь взаимодействует с элементами HUD
+
 
 
 var ears_base = {

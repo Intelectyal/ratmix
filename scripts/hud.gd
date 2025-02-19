@@ -24,6 +24,7 @@ func _ready():
 		%BrushB.icon = load("res://art/object2/brushbd.png")
 	%Food.disabled = true
 	GlobalFuncNVar.my_notification.connect(queue_notification)
+	GlobalFuncNVar.happiness_sig.connect(happy_bar_update)
 
 	
 func preview_string(text : String):
@@ -133,6 +134,7 @@ func buy_item():
 		money_update()
 		bgroup1.get_pressed_button().get_meta("Dict")["flag"] = true
 		items_update(bgroup1.get_pressed_button().get_meta("Dict")["name"],bgroup1.get_pressed_button().get_meta("Dict")["flag"])	
+	GlobalFuncNVar.calculate_happiness.emit()
 
 func show_cost_items():	
 	%CostItem.text = "COST: " + str(bgroup1.get_pressed_button().get_meta("cost"))
@@ -167,6 +169,7 @@ func _on_make_child_pressed():
 	if %OB0.get_selected_id() == %OB1.get_selected_id():
 		return
 	make_child.emit(GlobalFuncNVar.rats_arr[%OB0.get_selected_id()],GlobalFuncNVar.rats_arr[%OB1.get_selected_id()])
+	rat_bar_update()
 	option_buttons_update()
 	_list_sell_update()
 
@@ -175,9 +178,13 @@ func rat_bar_update():	#обновляет шкалу количества кр�
 		%ratrect0.scale.x = 0.037 + float(GlobalFuncNVar.rats_arr.size())
 		%ratrect1.scale.x = 0.0
 	if GlobalFuncNVar.rats_arr.size() >= 9 and GlobalFuncNVar.rats_arr.size() <= 16:
-		%ratrect1.scale.x = -8.038 + float(GlobalFuncNVar.rats_arr.size())
+		%ratrect1.scale.x = -8.01 + float(GlobalFuncNVar.rats_arr.size())
+	GlobalFuncNVar.calculate_happiness.emit()
 	
-
+func happy_bar_update(happy : int):
+	%happyrect.scale.x = happy
+#	print("happy: ", happy)
+	return
 func food_bar_update(food : int):
 	%foodrect.scale.x = food
 	GlobalFuncNVar.food_in_bowl.emit(food)

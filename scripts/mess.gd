@@ -27,3 +27,4 @@ func _on_area_2d_mouse_entered():
 		erase += 1 
 		if erase >= 3:
 			queue_free()
+			GlobalFuncNVar.delet_mess.emit(self)

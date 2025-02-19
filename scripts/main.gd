@@ -17,13 +17,16 @@ func _ready():
 	GlobalFuncNVar.food_is_buy.connect(food_update)
 	GlobalFuncNVar.rat_sell.connect(rat_is_sell)
 	GlobalFuncNVar.discovered_genes.append_array(base_genes_array())
-	print(GlobalFuncNVar.discovered_genes.size())
+	GlobalFuncNVar.calculate_happiness.connect(rats_happiness)
+	GlobalFuncNVar.delet_mess.connect(delet_mess)
+	rats_happiness()
 
 func _process(delta):
 	pass
 
-func brush_cursor(vis):
-	pass
+func delet_mess(object):
+	mess_arr.erase(object)
+	GlobalFuncNVar.calculate_happiness.emit()
 
 func shelftile():
 	%TileMap.set_layer_enabled(1,true)
@@ -62,6 +65,7 @@ func _on_hud_make_child(parent0 : Object,parent1 : Object): #тестовая к
 	parent0.breeded()
 	parent1.breeded()
 	rat.gen_mixer(parent0,parent1)
+	new_gene_notification(rat.genes.return_genes_array(),GlobalFuncNVar.discovered_genes)
 	rat.new_rat()
 	add_child(rat)
 	rat.randomspawn()
@@ -89,14 +93,42 @@ func _on_rat_scene_rat_signal_right(rat_index):
 	var rat = GlobalFuncNVar.rats_arr[rat_index]
 	rat.rat_name = $HUD.rat_rename(rat.position.x-40,rat.position.y-75)
 	
-
+func rats_happiness():
+	var rats_amount : int = 0
+	var toy_amount : int = 0
+	var mess_amount : int = 0
+	var happiness : int = 0
+	
+	rats_amount = GlobalFuncNVar.rats_arr.size()
+	if rats_amount == 0: 
+		GlobalFuncNVar.happiness_sig.emit(0)
+		return 
+	mess_amount = mess_arr.size()	
+	for i in GlobalFuncNVar.objs_list:
+		if GlobalFuncNVar.objs_list[i]:
+			toy_amount += 1
+	happiness -= mess_amount
+	happiness += toy_amount
+	if rats_amount == 1:
+		happiness -= 2
+	if rats_amount > 1 and rats_amount <= 15:
+		happiness += 2
+	if rats_amount > 15:
+		happiness -= 1
+	print("hap: ", happiness, " toy: ", toy_amount," mess: ", mess_amount, " rats: ", rats_amount)
+	happiness = clamp(happiness,0,5)
+	GlobalFuncNVar.happiness_sig.emit(happiness)
+	
 
 
 func _on_timer_mess():
-	mess_arr.append(mess_scene.instantiate())
-	var mess = mess_arr[mess_arr.size()-1]
-	mess.index = mess_arr.find(mess)
-	add_child(mess)
+	if mess_arr.size() < 5:
+		mess_arr.append(mess_scene.instantiate())
+		var mess = mess_arr.back()
+		mess.index = mess_arr.find(mess)
+		add_child(mess)
+		GlobalFuncNVar.calculate_happiness.emit()
+	print("Количество грязи ", mess_arr.size())
 	
 func food_update():
 	if GlobalFuncNVar.food == 0:
@@ -118,6 +150,16 @@ func timer_food_start():
 		%Food_timer.start()
 	
 
-func new_gene_notification(verifiable_array : Array = [])-> void:
-	return
-	pass
+func new_gene_notification(verifiable_array : Array = [], checked_array : Array = [])-> void:
+	if verifiable_array.is_empty():
+		return
+	if checked_array.is_empty():
+		return
+	for i in verifiable_array.size():
+		if checked_array.has(verifiable_array[i]):
+			continue
+		else:
+			checked_array.append(verifiable_array[i])
+			GlobalFuncNVar.my_notification.emit("Новая мутация")
+		
+

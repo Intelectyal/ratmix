@@ -149,8 +149,8 @@ _data = {
 radius = 20.188
 
 [node name="Rat_body" type="CharacterBody2D"]
-position = Vector2(1120, 664)
-scale = Vector2(0.52, 0.48)
+position = Vector2(168, 712)
+scale = Vector2(0.234467, 0.257766)
 collision_layer = 2
 input_pickable = true
 script = ExtResource("1_bnijq")

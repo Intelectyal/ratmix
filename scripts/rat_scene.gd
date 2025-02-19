@@ -18,17 +18,14 @@ var obj_anim_flag : bool = false
 var breedable : bool = true
 var cost : int = 0
 
-var damage: int:
-	get:
-		return damage * 10
+
 
 func _ready():
 	name_generator()
 	randomspawn()
 	rat_generate()
 	GlobalFuncNVar.rats_cost.connect(cost_calculation)
-	damage = 1 
-	print(damage)
+
 	
 	
 
@@ -170,9 +167,9 @@ func new_rat():
 	if genes.color["spots"] == true:
 		$spots.texture = ResourceLoader.load("res://art//rat//over//tier1//1.png")
 		$spots.modulate = genes.color["value_s"]
-#	$horns.texture = ResourceLoader.load()
-#	$mouth.texture = ResourceLoader.load()
-#	$wings.texture = ResourceLoader.load()
+	$horns.texture = ResourceLoader.load(genes.DNA[6]["skin"])
+	$mouth.texture = ResourceLoader.load(genes.DNA[7]["skin"])
+	$wings.texture = ResourceLoader.load(genes.DNA[8]["skin"])
 	
 	
 func gen_mixer(rat1 : Object, rat2 : Object):
@@ -192,11 +189,9 @@ func gen_mixer(rat1 : Object, rat2 : Object):
 		for i in rat1.genes.color["neighb"].size():
 			if rat2.genes.color["neighb"].has(rat1.genes.color["neighb"][i]): 
 				genes.color = rat1.genes.color["neighb"][i]
-				print("сложился")
 				return
 	genes.color = choose_parent(rat1.genes.color,rat2.genes.color)
 	if randi_range(0,100) <= genes.mutation_chance:	
-		print("мутация")
 		var colors : Array = []
 		for i in genes.color["neighb"]:
 			if i["summable"] == false:
@@ -260,7 +255,7 @@ func cost_calculation():
 	cost_array[8] + 0.5   # рот
 )
 	cost += calculate_color_bonus_cost(genes.color)*80
-	print(cost,"|||", calculate_color_bonus_cost(genes.color)*80 )
+	
 	
 
 func calculate_color_bonus_cost(color : Dictionary = {}) -> int:

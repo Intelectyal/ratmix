@@ -1,5 +1,5 @@
 
-var  mutation_chance = 30
+var  mutation_chance = 25
 
 var color = GlobalFuncNVar.grey
 
@@ -29,4 +29,5 @@ func return_genes_array()-> Array:
 	arr.append_array(DNA)
 	arr.append(size)
 	arr.append(fluffy)
+	arr.append(color)
 	return arr

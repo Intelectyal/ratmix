@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://foa8sh7r35nc"
-path="res://.godot/imported/ratbase.png-841f1e2256f8700fc3a68c8ef261b06c.ctex"
+uid="uid://w01pg1660qad"
+path="res://.godot/imported/1.png-ae7e5e37595a98350cfff65a73b2223b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/ratbase.png"
-dest_files=["res://.godot/imported/ratbase.png-841f1e2256f8700fc3a68c8ef261b06c.ctex"]
+source_file="res://art/rat/mouth/tier1/1.png"
+dest_files=["res://.godot/imported/1.png-ae7e5e37595a98350cfff65a73b2223b.ctex"]
 
 [params]
 

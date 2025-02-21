@@ -20,6 +20,7 @@ func _ready():
 	GlobalFuncNVar.calculate_happiness.connect(rats_happiness)
 	GlobalFuncNVar.delet_mess.connect(delet_mess)
 	rats_happiness()
+	
 
 func _process(delta):
 	pass
@@ -115,7 +116,6 @@ func rats_happiness():
 		happiness += 2
 	if rats_amount > 15:
 		happiness -= 1
-	print("hap: ", happiness, " toy: ", toy_amount," mess: ", mess_amount, " rats: ", rats_amount)
 	happiness = clamp(happiness,0,5)
 	GlobalFuncNVar.happiness_sig.emit(happiness)
 	
@@ -128,7 +128,6 @@ func _on_timer_mess():
 		mess.index = mess_arr.find(mess)
 		add_child(mess)
 		GlobalFuncNVar.calculate_happiness.emit()
-	print("Количество грязи ", mess_arr.size())
 	
 func food_update():
 	if GlobalFuncNVar.food == 0:
@@ -160,6 +159,30 @@ func new_gene_notification(verifiable_array : Array = [], checked_array : Array 
 			continue
 		else:
 			checked_array.append(verifiable_array[i])
-			GlobalFuncNVar.my_notification.emit("Новая мутация")
+			if verifiable_array[i] == verifiable_array.back():
+				GlobalFuncNVar.my_notification.emit("Новая мутация\n Мутировал цвет")
+				print(typeof(verifiable_array[i].keys())," -> ", verifiable_array[i].keys())
+				continue
+			var arr : Array = []
+			arr = path_to_name(verifiable_array[i])
+			print(arr,"хуй")
+			if arr != []:
+				var str ="Новая мутация!\nМутировал - " + arr[0] + "\nТир - " + arr[1] + "\nНомер - " + arr[2]
+				GlobalFuncNVar.my_notification.emit(str)
 		
-
+func path_to_name(dict : Dictionary):
+	var answer : Array = []
+	var str
+	if dict.get("fur") != null:
+		str = dict.get("fur").split("/")
+		answer.append(str[-3])
+		answer.append(str[-2][4])
+		answer.append(str[-1][0])
+	elif dict.get("skin") != null:
+		str = dict.get("skin").split("/")
+		answer.append(str[-3])
+		answer.append(str[-2][4])
+		answer.append(str[-1][0])
+	else:
+		return []
+	return answer

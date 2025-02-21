@@ -27,6 +27,7 @@ func _ready():
 	GlobalFuncNVar.happiness_sig.connect(happy_bar_update)
 
 	
+	
 func preview_string(text : String):
 	text = text.insert(13,"_preview")
 	return(text)
@@ -89,7 +90,7 @@ func _on_brush_pressed():
 		return
 	GlobalFuncNVar.Brush = true
 	Input.set_custom_mouse_cursor(GlobalFuncNVar.Brush_cursor)
-	return	
+		
 
 func _on_shop_pressed():
 	%Shop.visible = true
@@ -225,8 +226,10 @@ func _on_ob_1_item_selected(index):
 func _notification_close():#Закрывает уведомление
 	%Notification.visible = false
 	queue_notification() #проверяет нет ли еще уведомлений
-func show_my_notification(text : String): #показывает уведомление
+func show_my_notification(text : String): #показывает уведомление	
+	%Notif_anim.play("notification")
 	%Notification.visible = true
+	%Notification.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	%Nlabel.set_text(text)
 	
 func queue_notification(text : String = ""): #очередь уведомлений

@@ -147,5 +147,5 @@ autostart = true
 [connection signal="spawnrat" from="HUD" to="." method="_on_hud_spawnrat"]
 [connection signal="timeout" from="Timer_mess" to="." method="_on_timer_mess"]
 [connection signal="timeout" from="Food_timer" to="." method="_on_food_timer_timeout"]
-[connection signal="timeout" from="Happy_timer" to="." method="rats_happiness"]
 [connection signal="timeout" from="Happy_timer" to="." method="_on_happy_timer_timeout"]
+[connection signal="timeout" from="Happy_timer" to="." method="rats_happiness"]

@@ -84,7 +84,7 @@ var eyes_tier2_1 = {
 	"skin" : "res://art/rat/eyes/tier2/1.png"
 }
 var eyes_tier2_2 = {
-	"skin" : "res://art/rat/eyes/tier2/null"
+	"skin" : "res://art/rat/eyes/tier2/2null"
 }
 var legs_base = {
 	"skin" : "res://art/rat/legs/tier0/0skin.png",
@@ -112,7 +112,7 @@ var legs_tier2_2 = {
 	"fur" : "res://art/rat/legs/tier2/2fur.png"
 }
 var nose_base = {
-	"fur" : "",
+	"fur" : "res://art/rat/noses/tier0/0null",
 	"skin" : "res://art/rat/noses/tier0/0skin.png"
 }
 var nose_tier1_1 = {
@@ -124,7 +124,7 @@ var nose_tier2_1 = {
 	"skin" : "res://art/rat/noses/tier2/1skin.png"
 }
 var nose_tier1_2 = { 	
-	"fur" :  "",
+	"fur" :  "res://art/rat/noses/tier2/2null",
 	"skin" : "res://art/rat/noses/tier2/2skin.png"
 }
 
@@ -149,8 +149,8 @@ var tail_tier2_1 = {
 	"skin" : "res://art/rat/tails/tier2/1skin.png"
 }
 var tail_tier2_2 = {
-	"fur" : "",
-	"skin" : "res://art/rat/tails/tier2/null"
+	"fur" : "res://art/rat/tails/tier2/2null",
+	"skin" : "res://art/rat/tails/tier2/2null"
 }
 var body_base = {
 	"fur" : "res://art/rat/bodys/tier0/0.png"
@@ -163,43 +163,43 @@ var spots = {
 }
 
 var mouth_base = {
-	"fur" : "res://art/rat/mouth/tier0/null",
-	"skin" : "res://art/rat/mouth/tier0/null"
+	"fur" : "res://art/rat/mouth/tier0/0null",
+	"skin" : "res://art/rat/mouth/tier0/0null"
 }
 var horns_base = {
-	"fur" : "res://art/rat/horns/tier0/null",
-	"skin" : "res://art/rat/horns/tier0/null"
+	"fur" : "res://art/rat/horns/tier0/0null",
+	"skin" : "res://art/rat/horns/tier0/0null"
 }
 var wings_base = {
-	"fur" : "res://art/rat/wings/tier0/null",
-	"skin" : "res://art/rat/wings/tier0/null"
+	"fur" : "res://art/rat/wings/tier0/0null",
+	"skin" : "res://art/rat/wings/tier0/0null"
 }
 var mouth_tier1_1 = {
-	"fur" : "res://art/rat/mouth/tier1/null",
-	"skin" : "res://art/rat/mouth/tier1/0.png"
+	"fur" : "res://art/rat/mouth/tier1/1null",
+	"skin" : "res://art/rat/mouth/tier1/1.png"
 }
 var mouth_tier2_1= {
-	"fur" : "res://art/rat/mouth/tier2/null",
-	"skin" : "res://art/rat/mouth/tier2/0.png"
+	"fur" : "res://art/rat/mouth/tier2/1null",
+	"skin" : "res://art/rat/mouth/tier2/1.png"
 }
 var horns_tier1_1= {
-	"fur" : "res://art/rat/horns/tier1/null",
+	"fur" : "res://art/rat/horns/tier1/1null",
 	"skin" : "res://art/rat/horns/tier1/1.png"
 }
 var horns_tier2_1= {
-	"fur" : "res://art/rat/horns/tier2/null",
+	"fur" : "res://art/rat/horns/tier2/1null",
 	"skin" : "res://art/rat/horns/tier2/1.png"
 }
 var horns_tier2_2= {
-	"fur" : "res://art/rat/horns/tier2/null",
+	"fur" : "res://art/rat/horns/tier2/2null",
 	"skin" : "res://art/rat/horns/tier2/2.png"
 }
 var wings_tier1_1 = {
-	"fur" : "res://art/rat/wings/tier1/null",
+	"fur" : "res://art/rat/wings/tier1/1null",
 	"skin" : "res://art/rat/wings/tier1/1.png"
 }
 var wings_tier2_1 = {
-	"fur" : "res://art/rat/wings/tier2/null",
+	"fur" : "res://art/rat/wings/tier2/1null",
 	"skin" : "res://art/rat/wings/tier2/1.png"
 }
 #var mouth_tier1_1 = {}
@@ -387,7 +387,7 @@ func _ready():
 	get_txt(file, FirstName)
 	file = FileAccess.open("res://etc/first.txt",FileAccess.READ).get_file_as_string("res://etc/second.txt")
 	get_txt(file, SecondName)
-	Brush_cursor = load("res://art/object2/Без имени-2.png")
+	Brush_cursor = load("res://art/object2/brush_cursor.png")
 
 func get_txt(mystr : String, arr : Array):
 	var b = mystr.count("\n")

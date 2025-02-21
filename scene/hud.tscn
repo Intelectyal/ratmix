@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://c14nsvjbyqvq0"]
+[gd_scene load_steps=49 format=3 uid="uid://c14nsvjbyqvq0"]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_scixf"]
 [ext_resource type="Texture2D" uid="uid://u4dm2g5ws8hl" path="res://art/hud/ratbar.png" id="2_4lrh4"]
@@ -74,36 +74,29 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mc2q7"]
 texture = ExtResource("5_m6dun")
 
-[sub_resource type="Animation" id="Animation_mvn4v"]
-resource_name = "new_animation"
+[sub_resource type="Animation" id="Animation_eb2qo"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_nag42"]
+resource_name = "notification"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("%Notification:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.8),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(761.06, 331.055), Vector2(704, 378)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("%Notification:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
+"values": [Vector2(-466, -342), Vector2(-256, -162)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_4spkx"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fueox"]
 _data = {
-"new_animation": SubResource("Animation_mvn4v")
+"RESET": SubResource("Animation_eb2qo"),
+"notification": SubResource("Animation_nag42")
 }
 
 [node name="HUD" type="CanvasLayer"]
@@ -844,21 +837,35 @@ offset_bottom = 127.0
 scale = Vector2(0.037, 1.1)
 color = Color(0.294118, 0.356863, 0.670588, 1)
 
-[node name="NotificationLayer" type="CenterContainer" parent="Control/MarginContainer"]
+[node name="Notif_control" type="Control" parent="Control/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Notification" type="VBoxContainer" parent="Control/MarginContainer/NotificationLayer"]
+[node name="Notification" type="VBoxContainer" parent="Control/MarginContainer/Notif_control"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -162.0
+offset_right = 256.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/NotificationLayer/Notification"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/Notif_control/Notification"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource("35_od06n")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/NotificationLayer/Notification/TextureRect"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/Notif_control/Notification/TextureRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -870,7 +877,7 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Nlabel" type="Label" parent="Control/MarginContainer/NotificationLayer/Notification/TextureRect/MarginContainer"]
+[node name="Nlabel" type="Label" parent="Control/MarginContainer/Notif_control/Notification/TextureRect/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
@@ -882,7 +889,7 @@ clip_text = true
 text_overrun_behavior = 2
 visible_characters_behavior = 3
 
-[node name="OKbutton" type="Button" parent="Control/MarginContainer/NotificationLayer/Notification"]
+[node name="OKbutton" type="Button" parent="Control/MarginContainer/Notif_control/Notification"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -893,46 +900,11 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-visible = false
-
-[node name="Container" type="Container" parent="CenterContainer"]
-layout_mode = 2
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CenterContainer/Container"]
+[node name="Notif_anim" type="AnimationPlayer" parent="Control/MarginContainer/Notif_control"]
+unique_name_in_owner = true
 libraries = {
-"": SubResource("AnimationLibrary_4spkx")
+"": SubResource("AnimationLibrary_fueox")
 }
-
-[node name="Notification" type="VBoxContainer" parent="CenterContainer/Container"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/Container/Notification"]
-layout_mode = 2
-texture = ExtResource("35_od06n")
-
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Container/Notification/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="Nlabel" type="Label" parent="CenterContainer/Container/Notification/TextureRect/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 1
-label_settings = ExtResource("30_0d2ao")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-clip_text = true
-text_overrun_behavior = 2
-visible_characters_behavior = 3
 
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer2/Mix" to="." method="_on_mix_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer2/Shop" to="." method="_on_shop_pressed"]
@@ -959,4 +931,4 @@ visible_characters_behavior = 3
 [connection signal="item_selected" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer/MarginContainer/HBoxContainer/OB1" to="." method="_on_ob_1_item_selected"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Make child" to="." method="_on_make_child_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer3/Panel/Control/VBoxContainer2/MarginContainer/HBoxContainer/Exit" to="." method="mix_closed_pressed"]
-[connection signal="pressed" from="Control/MarginContainer/NotificationLayer/Notification/OKbutton" to="." method="_notification_close"]
+[connection signal="pressed" from="Control/MarginContainer/Notif_control/Notification/OKbutton" to="." method="_notification_close"]

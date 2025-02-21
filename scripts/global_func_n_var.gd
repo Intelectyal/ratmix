@@ -19,11 +19,11 @@ signal food_is_buy() #HUD -> MAIN
 signal rat_sell(id : int) # HUD -> MAIN 
 signal happiness_sig(happy : int) # MAIN -> HUD
 signal calculate_happiness # HUD -> MAIN
-signal delet_mess(object)
+signal delet_mess(object) #Object -> Main
 
 
 var discovered_genes : Array = []
-var FoodTime : float = 120.0
+var FoodTime : float = 180.0
 var rats_arr : Array
 var screen_size 
 var rat_on_path : bool

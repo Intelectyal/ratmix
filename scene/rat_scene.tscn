@@ -203,6 +203,7 @@ libraries = {
 
 [node name="Breedable" type="Timer" parent="."]
 unique_name_in_owner = true
+wait_time = 30.0
 one_shot = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -212,7 +213,7 @@ debug_color = Color(0.886275, 0.262745, 0.521569, 0.419608)
 
 [node name="Adult" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 3.0
+wait_time = 30.0
 
 [connection signal="input_event" from="." to="." method="_on_character_body_2d_input_event"]
 [connection signal="timeout" from="Goto" to="." method="_on_timer_timeout"]

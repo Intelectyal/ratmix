@@ -21,7 +21,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalFuncNVar="*res://scripts/global_func_n_var.gd"
+Globalvariables="*res://scripts/global_func_n_var.gd"
+GlobalSignals="*res://scripts/global_signals.gd"
 
 [display]
 

@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://da76bvosgnxnw"]
+
+[ext_resource type="Script" path="res://scripts/name_edit_line.gd" id="1_wlqe3"]
+
+[node name="Container" type="Container"]
+offset_left = -181.0
+offset_top = -93.0
+offset_right = -141.0
+offset_bottom = -53.0
+script = ExtResource("1_wlqe3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+
+[node name="OK" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "OK"
+
+[node name="NO" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "NO"
+
+[connection signal="pressed" from="HBoxContainer/OK" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="HBoxContainer/NO" to="." method="_on_no_pressed"]

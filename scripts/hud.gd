@@ -5,27 +5,26 @@ signal spawnrat(cost : int)
 signal make_child(rat1 : Object, rat2 : Object)
 
 
-var rat_label = Label.new()
-var rlabel_timer = Timer.new()
-var rat_line = LineEdit.new()
+
+var rat_line_scene = preload("res://scene/name_edit_line.tscn")
 var bgroup1
 var list_names : Array 
 var notif_array : Array[String] = []
 
 func _ready():
 	food_bar_update(0) #обнуляет food bar полностью
-	GlobalFuncNVar.food_timer.connect(food_bar_update)
+	GlobalSignals.food_timer.connect(food_bar_update)
 	rat_bar_update()
-	add_child(rat_label)
-	add_child(rlabel_timer)
-	rlabel_timer.timeout.connect(rlabel_timer_timeout)
 	bgroup1 = %Food.get_button_group()
 	if %Food.get_meta("Dict")["flag"] == false: #понять зачем я ее сделал
 		%BrushB.icon = load("res://art/object2/brushbd.png")
 	%Food.disabled = true
-	GlobalFuncNVar.my_notification.connect(queue_notification)
-	GlobalFuncNVar.happiness_sig.connect(happy_bar_update)
-
+	GlobalSignals.my_notification.connect(queue_notification)
+	GlobalSignals.happiness_sig.connect(happy_bar_update)
+	GlobalSignals.rat_signal_l.connect(rat_info)
+	GlobalSignals.rat_signal_r.connect(rat_rename)
+	GlobalSignals.no_pressed.connect(line_pressed_no)
+	GlobalSignals.ok_pressed.connect(line_pressed_ok)
 	
 	
 func preview_string(text : String):
@@ -34,62 +33,78 @@ func preview_string(text : String):
 	
 func preview(id,choice):
 	var node = get_node("%SubViewport"+str(choice))	
-	node.find_child("body").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[0]["fur"]))	
-	node.find_child("body").modulate = GlobalFuncNVar.rats_arr[id].genes.color["value"]
-	node.find_child("ears_f").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[1]["fur"]))
-	node.find_child("ears_s").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[1]["skin"]))
-	node.find_child("ears_f").modulate = GlobalFuncNVar.rats_arr[id].genes.color["value"]
-	node.find_child("eyes").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[2]["skin"]))
-	node.find_child("legs_f").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[3]["fur"]))
-	node.find_child("legs_s").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[3]["skin"]))
-	node.find_child("legs_f").modulate = GlobalFuncNVar.rats_arr[id].genes.color["value"]
-	node.find_child("nose_f").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[4]["fur"]))
-	node.find_child("nose_s").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[4]["skin"]))
-	node.find_child("nose_f").modulate = GlobalFuncNVar.rats_arr[id].genes.color["value"]	
-	node.find_child("tail_f").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[5]["fur"]))
-	node.find_child("tail_s").texture = ResourceLoader.load(preview_string(GlobalFuncNVar.rats_arr[id].genes.DNA[5]["skin"]))
-	node.find_child("tail_f").modulate = GlobalFuncNVar.rats_arr[id].genes.color["value"]	
+	node.find_child("body").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[0]["fur"]))	
+	node.find_child("body").modulate = Globalvariables.rats_arr[id].genes.color["value"]
+	node.find_child("ears_f").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[1]["fur"]))
+	node.find_child("ears_s").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[1]["skin"]))
+	node.find_child("ears_f").modulate = Globalvariables.rats_arr[id].genes.color["value"]
+	node.find_child("eyes").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[2]["skin"]))
+	node.find_child("legs_f").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[3]["fur"]))
+	node.find_child("legs_s").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[3]["skin"]))
+	node.find_child("legs_f").modulate = Globalvariables.rats_arr[id].genes.color["value"]
+	node.find_child("nose_f").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[4]["fur"]))
+	node.find_child("nose_s").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[4]["skin"]))
+	node.find_child("nose_f").modulate = Globalvariables.rats_arr[id].genes.color["value"]	
+	node.find_child("tail_f").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[5]["fur"]))
+	node.find_child("tail_s").texture = ResourceLoader.load(preview_string(Globalvariables.rats_arr[id].genes.DNA[5]["skin"]))
+	node.find_child("tail_f").modulate = Globalvariables.rats_arr[id].genes.color["value"]	
 
 func _process(delta):
 	pass
 	
 func money_update():
-	%Money0.set_text("MONEY: " + str(GlobalFuncNVar.money))
-	%Money1.set_text("MONEY: " + str(GlobalFuncNVar.money))
-	%Money2.set_text("MONEY: " + str(GlobalFuncNVar.money))
+	%Money0.set_text("MONEY: " + str(Globalvariables.money))
+	%Money1.set_text("MONEY: " + str(Globalvariables.money))
+	%Money2.set_text("MONEY: " + str(Globalvariables.money))
 	
-func rat_info(rat_name,x,y):
-	rat_line.visible = false
+func rat_info(rat):
+	var rat_label = Label.new()
+	add_child(rat_label)
+	var rlabel_timer = Timer.new()
+	rlabel_timer.set_wait_time(3.0)
+	add_child(rlabel_timer)
+	rlabel_timer.timeout.connect(rlabel_timer_timeout.bind(rat, rat_label,rlabel_timer))
 	rat_label.visible = true
-	rat_label.text = rat_name
-	rat_label.position.x = x
-	rat_label.position.y = y
+	rat_label.text = rat.rat_name
+	rat_label.position = rat.position + Vector2(-25.0,-55.0)
 	rlabel_timer.start()
+	rat.set_physics_process(false)
 
-func rlabel_timer_timeout():
-	rat_label.visible = false
+
+
+func rlabel_timer_timeout(rat : Object, rat_label : Object, rat_timer : Object):
+	rat.set_physics_process(true)
+	delete_label(rat_label,rat_timer)
 	
-func rat_rename(x,y): #ПЕРЕДЕЛАТЬ
-	rat_label.visible = false
-	rat_line.visible = true
-	var new_name = "ЗАГЛУШКА"
-	add_child(rat_line)
-	rat_line.scale.x = 1
-	rat_line.scale.y = 1
-	rat_line.position.x = x
-	rat_line.position.y = y
-	rat_line.placeholder_text = "name"
-	return new_name
+func delete_label(rat_label, rat_timer):
+	rat_label.queue_free()
+	rat_timer.queue_free()
+
+
+func line_pressed_no(line : Object):
+	line.queue_free()
+
+func line_pressed_ok(line : Object):
+	line.queue_free()
+
+func rat_rename(rat : Object): #ПЕРЕДЕЛАТЬ
+	var line = rat_line_scene.instantiate()
+	add_child(line)
+	line.position = rat.position + Vector2(-55.0,+55.0)
+	line.scale = Vector2(0.75,0.75)
+	rat.set_physics_process(false)
+	var new_name : String = "JIMHI"
+	rat.rat_name = new_name
 
 func _on_brush_pressed():
-	if GlobalFuncNVar.Brush == null:
+	if Globalvariables.Brush == null:
 		return
-	if GlobalFuncNVar.Brush == true:
-		GlobalFuncNVar.Brush = false
+	if Globalvariables.Brush == true:
+		Globalvariables.Brush = false
 		Input.set_custom_mouse_cursor(null)
 		return
-	GlobalFuncNVar.Brush = true
-	Input.set_custom_mouse_cursor(GlobalFuncNVar.Brush_cursor)
+	Globalvariables.Brush = true
+	Input.set_custom_mouse_cursor(Globalvariables.Brush_cursor)
 		
 
 func _on_shop_pressed():
@@ -106,7 +121,7 @@ func _on_mix_pressed():
 func option_buttons_update(): #обновляет списки в окне скрещивания
 	%OB0.clear()
 	%OB1.clear()
-	for i in GlobalFuncNVar.rats_arr:
+	for i in Globalvariables.rats_arr:
 		%OB0.add_item(i.rat_name)
 		%OB1.add_item(i.rat_name)	
 
@@ -119,8 +134,8 @@ func mix_closed_pressed():
 	Hudflag()
 
 func buy_rat():
-	if int(%CostRat.text) <= GlobalFuncNVar.money:
-		if GlobalFuncNVar.rats_arr.size() >= GlobalFuncNVar.max_rats:
+	if int(%CostRat.text) <= Globalvariables.money:
+		if Globalvariables.rats_arr.size() >= Globalvariables.max_rats:
 			return
 		spawnrat.emit(int(%CostRat.text))
 		money_update()
@@ -130,12 +145,12 @@ func buy_rat():
 func buy_item():
 	if  !is_instance_valid(bgroup1.get_pressed_button()):
 		return
-	if bgroup1.get_pressed_button().get_meta("cost") <= GlobalFuncNVar.money and bgroup1.get_pressed_button().get_meta("Dict")["flag"] != true:	
-		GlobalFuncNVar.money -= bgroup1.get_pressed_button().get_meta("cost")
+	if bgroup1.get_pressed_button().get_meta("cost") <= Globalvariables.money and bgroup1.get_pressed_button().get_meta("Dict")["flag"] != true:	
+		Globalvariables.money -= bgroup1.get_pressed_button().get_meta("cost")
 		money_update()
 		bgroup1.get_pressed_button().get_meta("Dict")["flag"] = true
 		items_update(bgroup1.get_pressed_button().get_meta("Dict")["name"],bgroup1.get_pressed_button().get_meta("Dict")["flag"])	
-	GlobalFuncNVar.calculate_happiness.emit()
+	GlobalSignals.calculate_happiness.emit()
 
 func show_cost_items():	
 	%CostItem.text = "COST: " + str(bgroup1.get_pressed_button().get_meta("cost"))
@@ -143,44 +158,44 @@ func show_cost_items():
 func items_update(item_name, flag):
 	match item_name:
 		"Food":
-			GlobalFuncNVar.food_is_buy.emit()
+			GlobalSignals.food_is_buy.emit()
 		"Shelf":
-				GlobalFuncNVar.shelf_buy.emit()
-				GlobalFuncNVar.shelf_is_buy = true
+				GlobalSignals.shelf_buy.emit()
+				Globalvariables.shelf_is_buy = true
 		"Brush":
 				%BrushB.icon = load("res://art/object2/brushbp.png")
-				GlobalFuncNVar.Brush = true
+				Globalvariables.Brush = true
 		"House":
-				GlobalFuncNVar.House_buy.emit()
+				GlobalSignals.House_buy.emit()
 		"Wheel":
-				GlobalFuncNVar.Wheel_buy.emit()
+				GlobalSignals.Wheel_buy.emit()
 		"Bush":
-				GlobalFuncNVar.Bush_buy.emit()
+				GlobalSignals.Bush_buy.emit()
 		"Tramp":
-				GlobalFuncNVar.Tramp_buy.emit()
+				GlobalSignals.Tramp_buy.emit()
 		"Tube":
-				GlobalFuncNVar.Tube_buy.emit()
+				GlobalSignals.Tube_buy.emit()
 		"Bowl":
 				%Food.disabled = false
-				GlobalFuncNVar.Bowl_buy.emit()
+				GlobalSignals.Bowl_buy.emit()
 		_:
 			pass		
 
 func _on_make_child_pressed():
 	if %OB0.get_selected_id() == %OB1.get_selected_id():
 		return
-	make_child.emit(GlobalFuncNVar.rats_arr[%OB0.get_selected_id()],GlobalFuncNVar.rats_arr[%OB1.get_selected_id()])
+	make_child.emit(Globalvariables.rats_arr[%OB0.get_selected_id()],Globalvariables.rats_arr[%OB1.get_selected_id()])
 	rat_bar_update()
 	option_buttons_update()
 	_list_sell_update()
 
 func rat_bar_update():	#обновляет шкалу количества крыс
-	if GlobalFuncNVar.rats_arr.size() <= 8:
-		%ratrect0.scale.x = 0.037 + float(GlobalFuncNVar.rats_arr.size())
+	if Globalvariables.rats_arr.size() <= 8:
+		%ratrect0.scale.x = 0.037 + float(Globalvariables.rats_arr.size())
 		%ratrect1.scale.x = 0.0
-	if GlobalFuncNVar.rats_arr.size() >= 9 and GlobalFuncNVar.rats_arr.size() <= 16:
-		%ratrect1.scale.x = -8.01 + float(GlobalFuncNVar.rats_arr.size())
-	GlobalFuncNVar.calculate_happiness.emit()
+	if Globalvariables.rats_arr.size() >= 9 and Globalvariables.rats_arr.size() <= 16:
+		%ratrect1.scale.x = -8.01 + float(Globalvariables.rats_arr.size())
+	GlobalSignals.calculate_happiness.emit()
 	
 func happy_bar_update(happy : int):
 	%happyrect.scale.x = happy
@@ -188,26 +203,26 @@ func happy_bar_update(happy : int):
 	return
 func food_bar_update(food : int):
 	%foodrect.scale.x = food
-	GlobalFuncNVar.food_in_bowl.emit(food)
+	GlobalSignals.food_in_bowl.emit(food)
 	%Food.get_meta("Dict")["flag"] = false
 
 func _on_shop_tab_changed(tab): #обработчик изменения вкладок магазина
 	if %Shop.current_tab == 2:
-		GlobalFuncNVar.rats_cost.emit()
+		GlobalSignals.rats_cost.emit()
 	_list_sell_update()
 
 	
 	
 func _list_sell_update(): #обновляет список мышей на продажу
 	%OB3.clear()
-	for i in GlobalFuncNVar.rats_arr:
+	for i in Globalvariables.rats_arr:
 		%OB3.add_item(i.rat_name)
 
 func _on_sell_pressed(): #функция продажи
 	var id = %OB3.get_selected_id()
 	if id == -1:
 		return
-	GlobalFuncNVar.rat_sell.emit(id)
+	GlobalSignals.rat_sell.emit(id)
 	money_update()
 	rat_bar_update()
 	_list_sell_update()
@@ -242,6 +257,6 @@ func queue_notification(text : String = ""): #очередь уведомлен�
 		notif_array.pop_front()
 func Hudflag():
 	if %Shop.is_visible() or %Panel.is_visible():
-		GlobalFuncNVar.HudFlag = true
+		Globalvariables.HudFlag = true
 	if !%Shop.is_visible() and !%Panel.is_visible():
-		GlobalFuncNVar.HudFlag = false
+		Globalvariables.HudFlag = false

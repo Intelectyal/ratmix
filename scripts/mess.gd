@@ -23,8 +23,8 @@ func _process(delta):
 
 
 func _on_area_2d_mouse_entered():
-	if GlobalFuncNVar.Brush == true:
+	if Globalvariables.Brush == true:
 		erase += 1 
 		if erase >= 3:
 			queue_free()
-			GlobalFuncNVar.delet_mess.emit(self)
+			GlobalSignals.delet_mess.emit(self)

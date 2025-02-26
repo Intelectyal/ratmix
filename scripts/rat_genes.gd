@@ -1,15 +1,15 @@
 
 var  mutation_chance = 101
 
-var color = GlobalFuncNVar.grey
+var color = Globalvariables.grey
 
 var fluffy = {"fluffy" : false}
 var size = {"size" : 0.5}
 
 
 
-var DNA = [GlobalFuncNVar.body_base,GlobalFuncNVar.ears_base,GlobalFuncNVar.eyes_base,GlobalFuncNVar.legs_base
-,GlobalFuncNVar.nose_base,GlobalFuncNVar.tail_base,GlobalFuncNVar.horns_base,GlobalFuncNVar.wings_base,GlobalFuncNVar.mouth_base
+var DNA = [Globalvariables.body_base,Globalvariables.ears_base,Globalvariables.eyes_base,Globalvariables.legs_base
+,Globalvariables.nose_base,Globalvariables.tail_base,Globalvariables.horns_base,Globalvariables.wings_base,Globalvariables.mouth_base
 ]
 
 func get_fluffy():

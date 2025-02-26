@@ -1,12 +1,10 @@
 extends CharacterBody2D
 
-signal rat_signal_left(rat_index)
-signal rat_signal_right(rat_index)
+
 
 
 var rat_speed = 40000
-var rat_name = ""
-var rat_index = ""
+var rat_name : String = ""
 var rat_gen = load("res://scripts/rat_genes.gd")
 var genes = rat_gen.new()
 var target 
@@ -24,9 +22,8 @@ func _ready():
 	name_generator()
 	randomspawn()
 	rat_generate()
-	GlobalFuncNVar.rats_cost.connect(cost_calculation)
-
-	
+	GlobalSignals.rats_cost.connect(cost_calculation)
+#	set_physics_process(false) He работает
 	
 
 func anim_flag_change():
@@ -38,7 +35,7 @@ func breeded():
 	%Breedable.start()
 func _on_timer_timeout():
 	if true:
-		#var i = GlobalFuncNVar.roulette(10)
+		#var i = Globalvariables.roulette(10)
 		var i = randi_range(0,2)
 #		var i = 2
 		match (i):
@@ -48,22 +45,22 @@ func _on_timer_timeout():
 					run_state = 0
 				counter_pos = position
 			1:
-				if GlobalFuncNVar.shelf_is_buy and run_state != 2:
+				if Globalvariables.shelf_is_buy and run_state != 2:
 					if velocity == Vector2(0.0,0.0):
-						if GlobalFuncNVar.rat_on_path == false:
+						if Globalvariables.rat_on_path == false:
 							set_collision_mask_value(1,false)
-							GlobalFuncNVar.rat_on_path = true
+							Globalvariables.rat_on_path = true
 							run_state = 1
 							number_of_pos = 0
 			2:
 				if velocity == Vector2(0.0,0.0) and run_state != 2:
 					if !obj_anim_flag:
-						for j in GlobalFuncNVar.objs_list:
-							if GlobalFuncNVar.objs_list[j]:
-								GlobalFuncNVar.objs_list[j]=false
+						for j in Globalvariables.objs_list:
+							if Globalvariables.objs_list[j]:
+								Globalvariables.objs_list[j]=false
 								rat_on_obj = j
 								run_state = 2
-								target = GlobalFuncNVar.objs_coord[j]
+								target = Globalvariables.objs_coord[j]
 								anim_flag_change()
 								return
 			_:
@@ -72,7 +69,7 @@ func _on_timer_timeout():
 	pass
 
 func _input(event):
-	if GlobalFuncNVar.HudFlag:
+	if Globalvariables.HudFlag:
 		return
 	if event.is_action_pressed("mouse_left") and event.double_click and number_of_pos == -1 and run_state != 2:
 		target = get_global_mouse_position()
@@ -93,7 +90,7 @@ func rat_run(delta):
 			_:
 				run_state = 0
 				number_of_pos = -1
-				GlobalFuncNVar.rat_on_path = false
+				Globalvariables.rat_on_path = false
 				set_collision_mask_value(1,true)
 	velocity = position.direction_to(target)*rat_speed*delta	
 	if position.distance_to(target) > 10:
@@ -103,7 +100,7 @@ func rat_run(delta):
 	else:
 		velocity = Vector2(0.0,0.0)
 		if run_state == 2: 
-			GlobalFuncNVar.objs_list[rat_on_obj]=true 
+			Globalvariables.objs_list[rat_on_obj]=true 
 			pass
 		if run_state == 1 and number_of_pos <= 3:
 			number_of_pos += 1
@@ -120,7 +117,7 @@ func anim_obj():
 			%Rat_anim.play("tramp")
 		"Tube":
 			%Rat_anim.play("Tube")
-	GlobalFuncNVar.obj_start_animation.emit(rat_on_obj)
+	Globalvariables.obj_start_animation.emit(rat_on_obj)
 
 func _physics_process(delta):	
 	rat_run(delta)
@@ -129,14 +126,14 @@ func _physics_process(delta):
 
 func _on_character_body_2d_input_event(viewport, event, shape_idx):
 	if Input.is_action_pressed("mouse_left"):
-		rat_signal_left.emit(rat_index)
+		GlobalSignals.rat_signal_l.emit(self)
 	elif Input.is_action_pressed("mouse_right"):
-		rat_signal_right.emit(rat_index)
+		GlobalSignals.rat_signal_r.emit(self)
 		
 
 func name_generator():#генератор имён
-	rat_name += GlobalFuncNVar.FirstName.pick_random()
-	rat_name += GlobalFuncNVar.SecondName.pick_random()
+	rat_name += Globalvariables.FirstName.pick_random()
+	rat_name += Globalvariables.SecondName.pick_random()
 
 func randomspawn():#дает крысе случайные координаты
 	position.x = randi_range(500*0.5,600*0.5)
@@ -177,7 +174,7 @@ func gen_mixer(rat1 : Object, rat2 : Object):
 	if randi_range(0,100) <= genes.mutation_chance:
 		genes.set_fluffy(true)
 	if genes.get_fluffy() == true:
-		genes.DNA[0] = GlobalFuncNVar.body_fluffy
+		genes.DNA[0] = Globalvariables.body_fluffy
 	for i in (genes.DNA.size()):
 		if i == 0:
 			continue
@@ -212,11 +209,11 @@ func choose_parent(a,b):
 
 func _on_rat_anim_animation_finished(anim_name):
 	anim_flag_change()
-	GlobalFuncNVar.obj_stop_animation.emit(rat_on_obj)
+	GlobalSignals.obj_stop_animation.emit(rat_on_obj)
 	run_state = 0
-	GlobalFuncNVar.objs_list[rat_on_obj] = true
+	Globalvariables.objs_list[rat_on_obj] = true
 func tramp_emit(frame):
-	GlobalFuncNVar.tramp_frame.emit(frame)
+	GlobalSignals.tramp_frame.emit(frame)
 	pass
 
 func child():
@@ -263,7 +260,7 @@ func calculate_color_bonus_cost(color : Dictionary = {}) -> int:
 	var is_check : Array[Dictionary] = []
 	var total_found : int = 0
 	var dist_index : int = 0
-	array.append_array(GlobalFuncNVar.grey["neighb"])
+	array.append_array(Globalvariables.grey["neighb"])
 	for i in array:
 		i["distance"] = 1
 	while !array.is_empty():

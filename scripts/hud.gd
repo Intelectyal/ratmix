@@ -84,17 +84,19 @@ func delete_label(rat_label, rat_timer):
 func line_pressed_no(line : Object):
 	line.queue_free()
 
-func line_pressed_ok(line : Object):
+func line_pressed_ok(line : Object, new_name : String):
 	line.queue_free()
+	GlobalSignals.my_notification.emit("Новое имя крысы теперь: <" + new_name + "> !")
 
+var line_array : Array = []
 func rat_rename(rat : Object): #ПЕРЕДЕЛАТЬ
 	var line = rat_line_scene.instantiate()
+	line_array.append(line)
 	add_child(line)
 	line.position = rat.position + Vector2(-55.0,+55.0)
 	line.scale = Vector2(0.75,0.75)
 	rat.set_physics_process(false)
-	var new_name : String = "JIMHI"
-	rat.rat_name = new_name
+	GlobalSignals.line_set_rat.emit(rat)
 
 func _on_brush_pressed():
 	if Globalvariables.Brush == null:

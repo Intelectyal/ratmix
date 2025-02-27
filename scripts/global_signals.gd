@@ -24,6 +24,7 @@ signal rat_signal_l(rat : Object) # RAT -> HUD
 signal rat_signal_r(rat : Object) # RAT -> HUD
 signal ok_pressed() #name_edit -> HUD
 signal no_pressed() #name_edit -> HUD
+signal line_set_rat(_rat : Object) #HUD -> name_edit
 
 func _ready():
 	pass 
